@@ -52,9 +52,9 @@ function [randCourse newTeachers] = createRandCourse(i, numTimeSlots, Features, 
     randFeatures = randsample(Features,randNumFeatures);
     randDuration = round(numTimeSlots*rand + 0.5);
     
-    randCourse = Course(i, randFeatures, randDuration,'C',[]);
-    
     randTeacher = round(length(Teachers) * rand + 0.5);
+    randCourse = Course(i, randFeatures, randDuration, 'C', randTeacher, []);
+    
     Teachers(randTeacher).classesTaught = [Teachers(randTeacher).classesTaught, randCourse];
     
     newTeachers = Teachers;
@@ -78,8 +78,8 @@ function [randEventCourse newStudents newTeachers] = createRandEvent(i, Students
     randStudent = round(length(Students) * rand + 0.5);
     randTeacher = round(length(Teachers) * rand + 0.5);
     randDuration = round(numTimeSlots * rand + 0.5);
-  
-    randEventCourse = Course(i, [], randDuration, 'M', randStudent);
+    
+    randEventCourse = Course(i, [], randDuration, 'M', randTeacher, randStudent);
     
     Students(randStudent).enrolledCourses = [Students(randStudent).enrolledCourses, randEventCourse];
     newStudents = Students;

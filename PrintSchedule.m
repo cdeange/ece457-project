@@ -13,13 +13,13 @@ function PrintSchedule( schedule2print )
     %iterate through and add days/timeslots    
     %vertical, add time slots
     for i = 1:numTimeSlots
-        schedule{i + 1,1} = {strcat('TS-',int2str(i))};
+        schedule{i + 1,1} = {strcat('Timeslot ',int2str(i))};
     end
     
     
     %horizontal, add days
     for i = 1:numDays
-        schedule{1,i + 1} = {strcat('Day-',int2str(i))};
+        schedule{1,i + 1} = {strcat('Day ',int2str(i))};
     end
     
     
@@ -49,7 +49,8 @@ function PrintSchedule( schedule2print )
             end
         end
     end
-    %disp(maxSizes)
+
+%     disp(maxSizes)
     
     %add blank cells so they all are same size
     for i = 1:numTimeSlots + 1
@@ -62,7 +63,7 @@ function PrintSchedule( schedule2print )
         end
     end
 
-    %disp(schedule);
+%     disp(schedule);
 
     %PRINT!!!!
       for i = 1:numTimeSlots + 1
@@ -83,10 +84,10 @@ function PrintSchedule( schedule2print )
                      str = char(strCell);
                   end
                   
-                  fprintf('%25s | ', str);
+                  fprintf('%20s | ', str);
             end
             fprintf('\n');
-            divider = repmat('-',1,28*(numDays+1));
+            divider = repmat('-',1,23*(numDays+1));
             fprintf('%s',divider);
             fprintf('\n');
           end
