@@ -5,15 +5,13 @@ classdef Teacher
     properties
         teacherID
         classesTaught
-        eventsAttended
     end
     
     methods
-        function teacher = Teacher(teacherID, classesTaught, eventsAttended)
+        function teacher = Teacher(teacherID, classesTaught)
            if nargin > 0
                teacher.teacherID = teacherID;
                teacher.classesTaught = classesTaught;
-               teacher.eventsAttended = eventsAttended;
            end
         end
     end

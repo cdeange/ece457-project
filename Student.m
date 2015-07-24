@@ -5,15 +5,13 @@ classdef Student
     properties
         studentID
         enrolledCourses
-        eventsAttended
     end
     
     methods
-        function student = Student(studentID, enrolledCourses, eventsAttended)
+        function student = Student(studentID, enrolledCourses)
             if nargin > 0
                 student.studentID = studentID;
                 student.enrolledCourses = enrolledCourses;
-                student.eventsAttended = eventsAttended;
             end
         end
     end

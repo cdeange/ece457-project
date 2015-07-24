@@ -4,16 +4,14 @@ classdef Schedule
     
     properties
         courseMappings
-        eventMappings
         days
         timeslots
     end
     
     methods
-        function schedule = Schedule(courseMappings, eventMappings, days, timeslots)
+        function schedule = Schedule(courseMappings, days, timeslots)
            if nargin > 0
               schedule.courseMappings = courseMappings; 
-              schedule.eventMappings = eventMappings;
               schedule.days = days;
               schedule.timeslots = timeslots;
            end

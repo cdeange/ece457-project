@@ -2,7 +2,6 @@ function PrintSchedule( schedule2print )
 
     %get values
     coursemappings = [schedule2print.courseMappings];
-    eventmappings = [schedule2print.eventMappings];
     numDays = schedule2print.days;
     numTimeSlots = schedule2print.timeslots;
     
@@ -39,20 +38,6 @@ function PrintSchedule( schedule2print )
        
     end
     
-    %go through and add all events/courses
-    for i = 1:length(eventmappings)
-        day = eventmappings(i).day + 1;
-        timeslot = eventmappings(i).timeSlot + 1;
-        
-        formattedMapping = formatEventMapping(eventmappings(i));
-        duration = eventmappings(i).event.duration;
-        
-        for ts = timeslot: timeslot + duration - 1
-            sizes = size(schedule{ts, day});
-            schedule{ts, day}{sizes(1) + 1,1} =  formattedMapping;
-        end
-       
-    end
     
     %go through each row and find max size for a given timeslot
     maxSizes = zeros(numTimeSlots + 1,1);
@@ -64,7 +49,7 @@ function PrintSchedule( schedule2print )
             end
         end
     end
-    disp(maxSizes)
+    %disp(maxSizes)
     
     %add blank cells so they all are same size
     for i = 1:numTimeSlots + 1
@@ -77,7 +62,7 @@ function PrintSchedule( schedule2print )
         end
     end
 
-    disp(schedule);
+    %disp(schedule);
 
     %PRINT!!!!
       for i = 1:numTimeSlots + 1
@@ -115,19 +100,10 @@ function [formatted] = formatCourseMapping(coursemapping)
     room = coursemapping.room;
     course = coursemapping.course;
     
-    str = sprintf('C:%d R:%d D:%d T:%d d:%d', course.courseID, room.roomID, day, timeslot, course.duration);
+    str = sprintf('%s%d R:%d T:%d d:%d', course.courseType, course.courseID, room.roomID, timeslot, course.duration );
     formatted = str;
 end
 
-function [formatted] = formatEventMapping(eventmapping)
-    day = eventmapping.day;
-    timeslot = eventmapping.timeSlot;
-    room = eventmapping.room;
-    event = eventmapping.event;
-    
-    str = sprintf('E:%d R:%d D:%d T:%d d:%d', event.eventID, room.roomID, day, timeslot, event.duration);
-    formatted = str;
-end
 
 
 

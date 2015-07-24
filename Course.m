@@ -6,14 +6,18 @@ classdef Course
         courseID
         featuresReq
         duration
+        courseType
+        studentsTaking
     end
     
     methods
-        function course = Course(courseID, featuresReq, duration)
+        function course = Course(courseID, featuresReq, duration, courseType, studentsTaking)
            if nargin > 0
               course.courseID = courseID;
               course.featuresReq = featuresReq;
               course.duration = duration;
+              course.courseType = courseType;
+              course.studentsTaking = studentsTaking;
            end
         end
     end
