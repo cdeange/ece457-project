@@ -1,18 +1,12 @@
-function [Courses Students Rooms Teachers] = GenerateInput( numDays, numTimeSlots, numCourses, numStudents, numRooms, numTeachers, numEvents, numFeatures )
+function [Courses Students Rooms Teachers] = GenerateInput( numTimeSlots, numCourses, numStudents, numRooms, numTeachers, numEvents, numFeatures )
     %GENERATEINPUT Summary of this function goes here
     %   Detailed explanation goes here
-    % e.g. [courses students rooms teachers events] = GenerateInput(5,6,5,4,15,5,5,5)
-    %TODO: actually assign stuff to them (reqs, enrollment, etc)
     
-    Features = RoomFeature.empty(numFeatures, 0);
     Courses = Course.empty(numCourses + numEvents,0);
     Students = Student.empty(numStudents,0);
     Rooms = Classroom.empty(numRooms,0);
     Teachers = Teacher.empty(numTeachers,0);
-        
-    for i = 1:numFeatures
-       Features(i) = RoomFeature(i);
-    end
+    Features = 1:numFeatures;
     
     for i = 1:numRooms
        Rooms(i) = createRandRoom(i, numStudents, Features); 

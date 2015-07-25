@@ -1,8 +1,5 @@
 function [ fitness fitnessHard fitnessSoft ] = GetFitness( schedule, students, Khard, Ksoft, verbose )
 
-addpath('constraints');
-
-
 if nargin < 3,
     Khard = 1000000;
 end
@@ -43,4 +40,3 @@ fitnessSoft = (Ksoft * fitnessSoft);
 fitness = fitnessHard + fitnessSoft;
 
 end
-
