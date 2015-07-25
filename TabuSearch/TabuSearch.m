@@ -5,26 +5,39 @@ function [ bestSolution ] = TabuSearch( schedule, rooms, tabuListLength, student
     
     tabuList = zeros(length(schedule.courseMappings));
     
-    %while still doing
-    for k = 1:length(schedule)
-        k
-       [bestNeighbourSched fitness secondCourseTabu] = getBestNeighbour(schedule, k, rooms, tabuList, students);
-       if fitness > bestFitness
-            bestSolution = bestNeighbourSched;
-            bestFitness = fitness;
-       end
-       %update Tabu - with tabu list size
-       tabuList = tabuList - 1;
-       tabuList(tabuList<0) = 0;
-       %TODO pass in tabu length list
-       tabuList(k) = tabuListLength;
-       if secondCourseTabu ~= 0
-           tabuList(secondCourseTabu) = tabuListLength;
-       end
-    
+    while bestFitness >= 1000000
+
+        bestNeighbourSolution = 0;
+        bestNeighbourFitness = Inf;
+        bestNeighbourIndex = 0;
+        bestNeighbourSwapIndex = 0;
+
+        for k = 1:length(schedule.courseMappings)
+            [neighbourSched fitness secondCourseTabu] = getBestNeighbour(bestSolution, k, rooms, tabuList, students);
+
+            if fitness < bestNeighbourFitness,
+                bestNeighbourSolution = neighbourSched;
+                bestNeighbourFitness = fitness;
+                bestNeighbourIndex = k;
+                bestNeighbourSwapIndex = secondCourseTabu;
+            end
+        
+        end
+
+        bestSolution = bestNeighbourSolution;
+        bestFitness = bestNeighbourFitness
+
+        tabuList = tabuList - 1;
+        tabuList(tabuList < 0) = 0;
+
+        tabuList(bestNeighbourIndex) = tabuListLength;
+        if bestNeighbourSwapIndex ~= 0
+           tabuList(bestNeighbourSwapIndex) = tabuListLength;
+        end
+
     end
-    %end
     
+    bestFitness
     
     %create tabu list
     %find all neighbours and their fitness
@@ -54,8 +67,8 @@ function [bestNeighbourSched bestNeighbourFitness secondCourseTabu] = getBestNei
                   newNeighourMappings = coursemappings;
                   newNeighourMappings(currentCourse) = newNeighbourMapping;
                   newNeighbourSched = Schedule(newNeighourMappings, days, timeslots);
-                  PrintSchedule(newNeighbourSched);
-                  fitness  = GetFitness( newNeighbourSched, students, 1000000, 1, true )
+%                   PrintSchedule(newNeighbourSched);
+                  fitness = GetFitness(newNeighbourSched, students );
                   if fitness < currentBestNeighbourFitness
                       currentBestNeighbour = newNeighbourSched;
                       currentBestNeighbourFitness = fitness;
@@ -100,12 +113,12 @@ function [bestNeighbourSched bestNeighbourFitness secondCourseTabu] = getBestNei
           end
        end
        
-       %set return
-       bestNeighbourSched = currentBestNeighbour;
-       bestNeighbourFitness = currentBestNeighbourFitness;
-       
-       
    end
+       
+   % set return
+   bestNeighbourSched = currentBestNeighbour;
+   bestNeighbourFitness = currentBestNeighbourFitness;
+       
   
    
 end

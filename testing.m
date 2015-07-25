@@ -1,6 +1,6 @@
 rand('state',0)
 
-[courses students rooms teachers days timeslots numFeatures] = ReadInput('input.csv');
+[courses students rooms teachers days timeslots numFeatures] = ReadInput('feasible.csv');
 [schedule] = GenerateInitialSolution(days, timeslots, courses, students, rooms, teachers);
 
 PrintSchedule(schedule);
