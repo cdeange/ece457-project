@@ -6,7 +6,6 @@ conflictIndex = 1;
 
 for i = 1:length(mappings),
     for j = i + 1:length(mappings),
-        cell(0);
         m1 = mappings(i);
         m2 = mappings(j);
         if m1.day ~= m2.day,
