@@ -40,21 +40,12 @@ function PrintCoursesRooms( schedule, students )
 end
 
 function [featuresreqs] = getStringFeatures( features )
+    featuresreqs = '';
     if isempty(features) ~= 1
-        featureIDs = zeros(length(features),1);
-        for i = 1:length(features)
-            featureIDs(i) = features(i).featureID;
-        end
-        featureIDs = sort(featureIDs);
-        str = sprintf('%d', featureIDs(1));
+        features = sort(features);
+        featuresreqs = sprintf('%d', features(1));
         for i = 2:length(features)
-           str = strcat(str, sprintf(',%d', featureIDs(i))) ;
-        end        
-    else
-        str = '';
+           featuresreqs = strcat(featuresreqs, sprintf(',%d', features(i)));
+        end
     end
-    
-    featuresreqs = str;
-    
-
 end
