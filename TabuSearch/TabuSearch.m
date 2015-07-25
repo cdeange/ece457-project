@@ -7,6 +7,7 @@ function [ bestSolution ] = TabuSearch( schedule, rooms, tabuListLength, student
     
     %while still doing
     for k = 1:length(schedule)
+        k
        [bestNeighbourSched fitness secondCourseTabu] = getBestNeighbour(schedule, k, rooms, tabuList, students);
        if fitness > bestFitness
             bestSolution = bestNeighbourSched;
@@ -14,6 +15,7 @@ function [ bestSolution ] = TabuSearch( schedule, rooms, tabuListLength, student
        end
        %update Tabu - with tabu list size
        tabuList = tabuList - 1;
+       tabuList(tabuList<0) = 0;
        %TODO pass in tabu length list
        tabuList(k) = tabuListLength;
        if secondCourseTabu ~= 0
@@ -37,7 +39,7 @@ function [bestNeighbourSched bestNeighbourFitness secondCourseTabu] = getBestNei
    currentBestNeighbourFitness = inf;
    secondCourseTabu = 0;
    coursemappings = schedule.courseMappings;
-   currentCoursemapping = coursemappings(currentCourse)
+   currentCoursemapping = coursemappings(currentCourse);
    course = currentCoursemapping.course;
    duration = course.duration;
    days = schedule.days;
