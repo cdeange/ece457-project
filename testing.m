@@ -1,4 +1,4 @@
-rand('state',0)
+rand('state', 0)
 
 [courses students rooms teachers days timeslots numFeatures] = ReadInput('feasible.csv');
 
@@ -21,4 +21,5 @@ PrintCourseMappings(students, length(courses), false);
 addpath('constraints');
 
 addpath('TabuSearch');
-TabuSearch(schedule, rooms, 5, students, 200)
+
+TabuSearch(schedule, rooms, 3, students, 100)
