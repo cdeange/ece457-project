@@ -22,4 +22,4 @@ addpath('constraints');
 
 addpath('TabuSearch');
 
-TabuSearch(schedule, rooms, 3, students, 100)
+[ globalBestFitness globalBestSolution fitnesses solutions ] = TabuSearch(schedule, rooms, 3, students, 100)

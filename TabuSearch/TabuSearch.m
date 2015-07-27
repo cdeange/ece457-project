@@ -1,4 +1,4 @@
-function [ globalBestFitness, globalBestSolution ] = TabuSearch( schedule, rooms, tabuListLength, students, maxIterations )
+function [ globalBestFitness globalBestSolution fitnesses solutions ] = TabuSearch( schedule, rooms, tabuListLength, students, maxIterations )
     
     bestSolution = schedule;
     bestFitness = Inf;
@@ -6,12 +6,17 @@ function [ globalBestFitness, globalBestSolution ] = TabuSearch( schedule, rooms
     globalBestFitness = bestFitness;
     
     tabuList = zeros(length(schedule.courseMappings));
+    fitnesses = zeros(maxIterations, 1);
+    solutions = Schedule.empty(maxIterations, 0);
     
     iterations = 1;
     while iterations <= maxIterations,
         
         [ bestSolution bestFitness tabuList ] = ...
             getBestNeighbourForSchedule( bestSolution, globalBestFitness, rooms, tabuList, tabuListLength, students );
+        
+        fitnesses(iterations) = bestFitness;
+        solutions(iterations) = bestSolution;
         
         if bestFitness < globalBestFitness,
             globalBestFitness = bestFitness;
