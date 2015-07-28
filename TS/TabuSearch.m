@@ -78,9 +78,9 @@ function [bestNeighbourSched bestNeighbourFitness secondCourseTabu] = getBestNei
         for j = 1 : timeslots - duration + 1
             if (i ~= currentCoursemapping.day || j ~= currentCoursemapping.timeSlot)
                 newNeighbourMapping = CourseMapping(course, currentCoursemapping.room, i, j);
-                newNeighourMappings = coursemappings;
-                newNeighourMappings(currentCourse) = newNeighbourMapping;
-                newNeighbourSched = Schedule(newNeighourMappings, days, timeslots);
+                newNeighbourMappings = coursemappings;
+                newNeighbourMappings(currentCourse) = newNeighbourMapping;
+                newNeighbourSched = Schedule(newNeighbourMappings, days, timeslots);
                 fitness = GetFitness(newNeighbourSched, students);
                 
                 if (tabuList(course.courseID) == 0 && fitness < currentBestNeighbourFitness) || ...
@@ -97,9 +97,9 @@ function [bestNeighbourSched bestNeighbourFitness secondCourseTabu] = getBestNei
     for i = 1:length(rooms)
         if (currentCoursemapping.room.roomID ~= rooms(i).roomID)
             newNeighbourMapping = CourseMapping(course, rooms(i), currentCoursemapping.day, currentCoursemapping.timeSlot);
-            newNeighourMappings = coursemappings;
-            newNeighourMappings(currentCourse) = newNeighbourMapping;
-            newNeighbourSched = Schedule(newNeighourMappings, days, timeslots);
+            newNeighbourMappings = coursemappings;
+            newNeighbourMappings(currentCourse) = newNeighbourMapping;
+            newNeighbourSched = Schedule(newNeighbourMappings, days, timeslots);
             fitness = GetFitness(newNeighbourSched, students);
             
             if (tabuList(course.courseID) == 0 && fitness < currentBestNeighbourFitness) || ...
@@ -121,10 +121,10 @@ function [bestNeighbourSched bestNeighbourFitness secondCourseTabu] = getBestNei
             if newEndSlot1 <= schedule.timeslots && newEndSlot2 <= schedule.timeslots,
                 newNeighbourMapping1 = CourseMapping(course, coursemappings(i).room, coursemappings(i).day, coursemappings(i).timeSlot);
                 newNeighbourMapping2 = CourseMapping(coursemappings(i).course, currentCoursemapping.room, currentCoursemapping.day, currentCoursemapping.timeSlot);
-                newNeighourMappings = coursemappings;
-                newNeighourMappings(currentCourse) = newNeighbourMapping1;
-                newNeighourMappings(i) = newNeighbourMapping2;
-                newNeighbourSched = Schedule(newNeighourMappings, days, timeslots);
+                newNeighbourMappings = coursemappings;
+                newNeighbourMappings(currentCourse) = newNeighbourMapping1;
+                newNeighbourMappings(i) = newNeighbourMapping2;
+                newNeighbourSched = Schedule(newNeighbourMappings, days, timeslots);
                 fitness = GetFitness(newNeighbourSched, students);
                 
                 if (tabuList(course.courseID) == 0 && tabuList(i) == 0 && fitness < currentBestNeighbourFitness) || ...
