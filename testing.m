@@ -1,6 +1,6 @@
 rand('state', 0)
 
-[courses students rooms teachers days timeslots numFeatures] = ReadInput('feasible.csv');
+[courses students rooms teachers days timeslots] = ReadInput('feasible.csv');
 
 % days = 5;
 % timeslots = 5;

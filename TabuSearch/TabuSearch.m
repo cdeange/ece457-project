@@ -40,7 +40,7 @@ function [ bestNeighbourSolution bestNeighbourFitness tabuList ] = getBestNeighb
     for k = 1:length(schedule.courseMappings)
         [neighbourSched fitness secondCourseTabu] = getBestNeighbour(schedule, aspirationFitness, k, rooms, tabuList, students);
 
-        if fitness < bestNeighbourFitness,
+        if fitness <= bestNeighbourFitness,
             bestNeighbourSolution = neighbourSched;
             bestNeighbourFitness = fitness;
             bestNeighbourIndex = k;

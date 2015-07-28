@@ -1,4 +1,4 @@
-function [ Courses Students Rooms Teachers numDays numTimeslots numFeatures ] = ReadInput( file )
+function [ Courses Students Rooms Teachers numDays numTimeslots ] = ReadInput( file )
 global lines;
 
 % Read all the values into a cell array, one entry per line
@@ -16,7 +16,6 @@ numStudents  = counts(4);
 numRooms     = counts(5);
 numTeachers  = counts(6);
 numEvents    = counts(7);
-numFeatures  = counts(8);
 
 offsetRooms    = 2;
 offsetTeachers = offsetRooms + numRooms;
