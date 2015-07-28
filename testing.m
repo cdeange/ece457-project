@@ -1,4 +1,4 @@
-rand('state', 0)
+rng(0);
 
 [courses students rooms teachers days timeslots] = ReadInput('feasible.csv');
 
@@ -21,5 +21,7 @@ PrintCourseMappings(students, length(courses), false);
 addpath('constraints');
 
 addpath('TS');
+addpath('SA');
 
-[ globalBestFitness globalBestSolution fitnesses solutions ] = TabuSearch(schedule, rooms, 3, students, 100)
+% [ bestFitness bestSolution fitnesses solutions ] = TabuSearch(schedule, rooms, 3, students, 20)
+[ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing(schedule, rooms, students)
