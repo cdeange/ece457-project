@@ -4,16 +4,16 @@ function [ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing( 
 %   Simulated Annealing (Adapted from X-S Yang, Cambridge University)
 
 % Initializing parameters and settings
-T_init = 1.0; % Initial temperature
-T_min = 1e-10; % Final stopping temperature
-F_min = -1e+100; % Min value of the function
-max_rej = 2500; % Maximum number of rejections
-max_run = 500; % Maximum number of runs
+T_init = 1.0;    % Initial temperature
+T_min = 1e-10;   % Final stopping temperature
+F_min = 0;       % Min value of the function
+max_rej = 2500;  % Maximum number of rejections
+max_run = 500;   % Maximum number of runs
 max_accept = 15; % Maximum number of accept
-k = 1; % Boltzmann constant
-alpha = 0.7; % Cooling factor
-Enorm = 1e-8; % Energy norm (eg, Enorm=le-8)
-guess = schedule; % Initial guess
+k = 1;           % Boltzmann constant
+alpha = 0.7;     % Cooling factor
+Enorm = 1e-8;    % Energy norm (eg, Enorm=le-8)
+guess = schedule;% Initial guess
 
 % Initializing the counters i,j etc
 i = 0;
@@ -64,7 +64,7 @@ while (T > T_min) && (j <= max_rej) && (E_new > F_min),
         E_old = E_new;
         accept = accept + 1;
     else
-      j = j + 1;
+        j = j + 1;
     end
 
     solutions(iter) = guess; %#ok

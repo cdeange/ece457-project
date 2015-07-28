@@ -18,10 +18,10 @@ PrintSchedule(schedule);
 PrintCoursesRooms (schedule, students);
 PrintCourseMappings(students, length(courses), false);
 
-addpath('constraints');
+addpath(strcat(pwd, '/constraints'));
 
-addpath('TS');
-addpath('SA');
+addpath(strcat(pwd, '/TS'));
+addpath(strcat(pwd, '/SA'));
 
-% [ bestFitness bestSolution fitnesses solutions ] = TabuSearch(schedule, rooms, 3, students, 20)
-[ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing(schedule, rooms, students)
+[ bestFitness bestSolution fitnesses solutions ] = TabuSearch(schedule, rooms, 3, students, 20)
+% [ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing(schedule, rooms, students)
