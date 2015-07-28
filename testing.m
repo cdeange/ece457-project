@@ -20,6 +20,6 @@ PrintCourseMappings(students, length(courses), false);
 
 addpath('constraints');
 
-addpath('TabuSearch');
+addpath('TS');
 
 [ globalBestFitness globalBestSolution fitnesses solutions ] = TabuSearch(schedule, rooms, 3, students, 100)
