@@ -17,8 +17,8 @@ popnew = Schedule.empty(popsize, 0);
 for i = 1:popsize,
     popnew(i) = GenerateInitialSolution(days, timeslots, courses, rooms);
 end
-fitness = repmat(-Inf, 1, popsize);
 
+fitness = repmat(-Inf, 1, popsize);
 fitnesses = zeros(1, MaxGen);
 solutions = Schedule.empty(MaxGen, 0);
 
@@ -65,7 +65,7 @@ end
 function [ fitness, popnew ] = evolve( i, pop, popnew, fitness, fitold, students )
 
 newFitness = -GetFitness(popnew(i), students);
-if newFitness > fitold(i),
+if newFitness >= fitold(i),
     % Child replaces parent
     fitness(i) = newFitness;
 else
