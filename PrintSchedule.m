@@ -32,10 +32,14 @@ function PrintSchedule( schedule2print )
         duration = coursemappings(i).course.duration;
         
         for ts = timeslot: timeslot + duration - 1
-            sizes = size(schedule{ts, day});
-            schedule{ts, day}{sizes(1) + 1,1} =  formattedMapping;
+            if ts > length(schedule),
+                fprintf('Course %d overflows timeslots!\n', coursemappings(i).course.courseID);
+            else
+                sizes = size(schedule{ts, day});
+                schedule{ts, day}{sizes(1) + 1,1} =  formattedMapping;
+            end
         end
-       
+    
     end
     
     
