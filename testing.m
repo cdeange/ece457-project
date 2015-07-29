@@ -22,6 +22,8 @@ addpath(strcat(pwd, '/constraints'));
 
 addpath(strcat(pwd, '/TS'));
 addpath(strcat(pwd, '/SA'));
+addpath(strcat(pwd, '/GA'));
 
-[ bestFitness bestSolution fitnesses solutions ] = TabuSearch(schedule, rooms, 3, students, 20)
+% [ bestFitness bestSolution fitnesses solutions ] = TabuSearch(schedule, rooms, 10, students, 100)
 % [ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing(schedule, rooms, students)
+[ bestFitness bestSolution fitnesses solutions ] = Genetic(courses, students, rooms, days, timeslots);
