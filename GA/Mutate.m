@@ -4,7 +4,7 @@ courseCount = length(parent.courseMappings);
 newMappings = CourseMapping.empty(courseCount, 0);
 
 days = parent.days;
-timeslots = parent.days;
+timeslots = parent.timeslots;
 roomCount = length(rooms);
 
 for i = 1:courseCount,

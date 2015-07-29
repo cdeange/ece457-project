@@ -41,6 +41,7 @@ elseif randOperation < 0.66,
 
 else
     % Swap two courses
+    i = 1;
     while true,
         randMapping = randsample(schedule.courseMappings, 1);
         randCourse = randMapping.course;
@@ -55,6 +56,13 @@ else
                 % Found two different courses that can be safely swapped
                 break
             end
+        end
+        
+        i = i + 1;
+        if i >= 5000
+            % It is unlikely any two courses can be swapped
+            newSchedule = schedule;
+            return
         end
     end
     

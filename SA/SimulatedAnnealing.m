@@ -4,15 +4,13 @@ function [ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing( 
 %   Simulated Annealing (Adapted from X-S Yang, Cambridge University)
 
 % Initializing parameters and settings
-T_init = 1.0;    % Initial temperature
-T_min = 1e-10;   % Final stopping temperature
+T_min = 1;       % Final stopping temperature
 F_min = 0;       % Min value of the function
-max_rej = 2500;  % Maximum number of rejections
-max_run = 500;   % Maximum number of runs
+max_rej = 1000;  % Maximum number of rejections
+max_run = 250;   % Maximum number of runs
 max_accept = 15; % Maximum number of accept
 k = 1;           % Boltzmann constant
-alpha = 0.7;     % Cooling factor
-Enorm = 1e-8;    % Energy norm (eg, Enorm=le-8)
+alpha = 0.9;     % Cooling factor
 guess = schedule;% Initial guess
 
 % Initializing the counters i,j etc
@@ -21,8 +19,9 @@ j = 0;
 accept = 0;
 
 % Initializing various values
-T = T_init;
 E_init = GetFitness(guess, students);
+T_init = E_init; % Initial temperature is initial fitness
+T = T_init;
 E_old = E_init;
 E_new = E_old;
 T_iteration = 1;
@@ -36,7 +35,7 @@ while (T > T_min) && (j <= max_rej) && (E_new > F_min),
     if (i >= max_run) || (accept >= max_accept),
 
         % Cooling according to a cooling schedule
-        T = T_init * (alpha ^ T_iteration);
+        T = T_init * (alpha ^ T_iteration)
         T_iteration = T_iteration + 1;
 
         % Reset the counters
@@ -51,7 +50,7 @@ while (T > T_min) && (j <= max_rej) && (E_new > F_min),
     DeltaE = E_new - E_old;
     
     % Accept if improved
-    if -DeltaE > Enorm,
+    if DeltaE < 0,
         guess = nextGuess;
         E_old = E_new;
         accept = accept + 1;
@@ -59,7 +58,7 @@ while (T > T_min) && (j <= max_rej) && (E_new > F_min),
     end
 
     % Accept with a small probability if not improved
-    if (DeltaE <= Enorm) && (exp(-DeltaE / (k * T)) > rand),
+    if (DeltaE >= 0) && (exp(-DeltaE / (k * T)) > rand),
         guess = nextGuess;
         E_old = E_new;
         accept = accept + 1;
