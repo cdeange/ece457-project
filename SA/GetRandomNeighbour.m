@@ -6,17 +6,17 @@ timeslots = schedule.timeslots;
 randOperation = rand;
 
 if randOperation < 0.33,
-    % Swap day and timeslot
+    % Change day and/or timeslot
 
     randMapping = randsample(schedule.courseMappings, 1);
     randCourse = randMapping.course;
     day = randMapping.day;
     timeslot = randMapping.timeSlot;
     
-    while day == randMapping.day || timeslot == randMapping.timeSlot,
-        day = round(days * rand + 0.5);
+    while day == randMapping.day && timeslot == randMapping.timeSlot,
+        day = randi([1, days], 1);
         validTimeSlots = timeslots - randCourse.duration + 1;
-        timeslot = round(validTimeSlots * rand + 0.5);
+        timeslot = randi([1, validTimeSlots], 1);
     end
     
     newMapping = CourseMapping(randCourse, randMapping.room, day, timeslot);
@@ -25,7 +25,7 @@ if randOperation < 0.33,
     newSchedule = Schedule(newMappings, days, timeslots);
 
 elseif randOperation < 0.66,
-    % Swap room
+    % Change room
     randMapping = randsample(schedule.courseMappings, 1);
     randCourse = randMapping.course;
     room = randMapping.room;

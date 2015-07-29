@@ -1,4 +1,4 @@
-function [ initialSchedule ] = GenerateInitialSolution( numDays, numTimeSlots, courses, students, rooms, teachers)
+function [ initialSchedule ] = GenerateInitialSolution( numDays, numTimeSlots, courses, rooms )
 %GENERATEINITIALSOLUTION Summary of this function goes here
 %   Detailed explanation goes here
 % [initialSchedule] = GenerateInitialSolution(5,6, courses, students,
@@ -8,10 +8,8 @@ function [ initialSchedule ] = GenerateInitialSolution( numDays, numTimeSlots, c
     numCourses = length(courses);
     coursemappings = CourseMapping.empty(numCourses,0);
     
-    %TODO assign random values for rooms, etc, and also check the
-    %durations/timeslots make sense
-    for i=1:length(courses)
-        %random room, day, timeslot (from 1 to numTimeslots-duration)
+    for i = 1:length(courses)
+        % random room, day, timeslot (from 1 to numTimeslots - duration)
         randRoom = randsample(rooms, 1);
         randDay = round(numDays * rand + 0.5);
         validTimeSlots = numTimeSlots - courses(i).duration + 1;

@@ -69,6 +69,7 @@ while (T > T_min) && (j <= max_rej) && (E_new > F_min),
 
     solutions(iter) = guess; %#ok
     fitnesses(iter) = E_old; %#ok
+    
     iter = iter + 1;
 end
 
