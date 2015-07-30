@@ -9,7 +9,7 @@ function [ bestFitness bestSolution fitnesses solutions ] = Genetic( courses, st
 %
 % Returns the best fitness and solutions for the inputs
 
-% Anonymous function to get the last index of a matrix
+% Anonymous function to get the last index of a returned matrix
 last = @(A) A(end);
 
 % Initializing the parameters
@@ -60,6 +60,7 @@ for i = 1:MaxGen,
     solutions(i) = last(popnew(fitnesses(i) == fitness));
 end
 
+% Record the global best solution ever
 bestFitness = max(fitnesses);
 bestSolution = last(solutions(fitnesses == bestFitness));
 

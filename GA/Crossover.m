@@ -22,7 +22,7 @@ end
 
 cpoints = sort(cpoints);
 
-% Unwrap the classes until a long vector of values
+% Unwrap the classes into a long vector of values
 valuesp1 = zeros(1, crossover_max);
 valuesp2 = zeros(1, crossover_max);
 for i = 1:courseCount,

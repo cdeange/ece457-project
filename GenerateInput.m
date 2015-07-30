@@ -43,8 +43,13 @@ end
 
 function [ randClassroom ] = createRandRoom( i, numStudents, Features )
 % Creates a room with a random features and capacity
-randNumFeatures = randi([1, length(Features)], 1);
-randFeatures = randsample(Features, randNumFeatures);
+if isempty(Features),
+    randFeatures = [];
+else
+    randNumFeatures = randi([1, length(Features)], 1);
+    randFeatures = randsample(Features, randNumFeatures);
+end
+
 randCapacity = randi([1, numStudents], 1);
 randClassroom = Classroom(i, randFeatures, randCapacity);
 end
@@ -52,11 +57,15 @@ end
 
 function [ randCourse Teachers ] = createRandCourse( i, numTimeSlots, Features, Teachers )
 % Creates a course with random features, duration, and teacher
-randNumFeatures = randi([1, length(Features)], 1);
-randFeatures = randsample(Features, randNumFeatures);
-randDuration = round(numTimeSlots*rand + 0.5);
+if isempty(Features),
+    randFeatures = [];
+else
+    randNumFeatures = randi([1, length(Features)], 1);
+    randFeatures = randsample(Features, randNumFeatures);
+end
 
-randTeacher = round(length(Teachers) * rand + 0.5);
+randDuration = randi([1, numTimeSlots], 1);
+randTeacher = randi([1, length(Teachers)], 1);
 randCourse = Course(i, randFeatures, randDuration, 'C', randTeacher, []);
 
 Teachers(randTeacher).classesTaught = [Teachers(randTeacher).classesTaught, randCourse];
@@ -83,7 +92,7 @@ randStudent = randi([1, length(Students)], 1);
 randTeacher = randi([1, length(Teachers)], 1);
 randDuration = randi([1, numTimeSlots], 1);
 
-randEventCourse = Course(i, [], randDuration, 'M', randTeacher, randStudent);
+randEventCourse = Course(i, [], randDuration, 'E', randTeacher, randStudent);
 
 Students(randStudent).enrolledCourses = [Students(randStudent).enrolledCourses, randEventCourse];
 Teachers(randTeacher).classesTaught = [Teachers(randTeacher).classesTaught, randEventCourse];

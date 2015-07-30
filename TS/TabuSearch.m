@@ -29,10 +29,10 @@ for iterations = 1:maxIterations,
     fitnesses(iterations) = bestFitness;
     solutions(iterations) = bestSolution;
     
+    % Update global best fitness & solution
     if bestFitness < globalBestFitness,
         globalBestFitness = bestFitness;
         globalBestSolution = bestSolution;
-        fprintf('iterations = %d, global best fitness = %d\n', iterations, globalBestFitness);
     end
     
 end
@@ -61,6 +61,7 @@ for k = 1:length(schedule.courseMappings)
 end
 
 if isinf(bestNeighbourFitness),
+    % It's possible that all feasible moves are tabu'ed
     bestNeighbourFitness = GetFitness(bestNeighbourSolution, students);
 end
 
@@ -93,13 +94,15 @@ timeslots = schedule.timeslots;
 % Find best of moving day/time
 for i = 1:days,
     for j = 1:(timeslots - duration + 1),
-        if (i ~= currentCoursemapping.day || j ~= currentCoursemapping.timeSlot),
+        if (i ~= currentCoursemapping.day) || (j ~= currentCoursemapping.timeSlot),
             newNeighbourMapping = CourseMapping(course, currentCoursemapping.room, i, j);
             newNeighbourMappings = coursemappings;
             newNeighbourMappings(currentCourse) = newNeighbourMapping;
             newNeighbourSched = Schedule(newNeighbourMappings, days, timeslots);
             fitness = GetFitness(newNeighbourSched, students);
             
+            % Allow non-tabu'ed better solutions, or tabu'ed solutions
+            % better than the global best
             if (tabuList(course.courseID) == 0 && fitness < currentBestNeighbourFitness) || ...
                     (tabuList(course.courseID) ~= 0 && fitness < aspirationFitness),
                 secondCourseTabu = 0;
@@ -112,13 +115,15 @@ end
 
 % Find best of swapping room
 for i = 1:length(rooms),
-    if (currentCoursemapping.room.roomID ~= rooms(i).roomID),
+    if currentCoursemapping.room.roomID ~= rooms(i).roomID,
         newNeighbourMapping = CourseMapping(course, rooms(i), currentCoursemapping.day, currentCoursemapping.timeSlot);
         newNeighbourMappings = coursemappings;
         newNeighbourMappings(currentCourse) = newNeighbourMapping;
         newNeighbourSched = Schedule(newNeighbourMappings, days, timeslots);
         fitness = GetFitness(newNeighbourSched, students);
         
+        % Allow non-tabu'ed better solutions, or tabu'ed solutions
+        % better than the global best
         if (tabuList(course.courseID) == 0 && fitness < currentBestNeighbourFitness) || ...
                 (tabuList(course.courseID) ~= 0 && fitness < aspirationFitness),
             secondCourseTabu = 0;
@@ -135,6 +140,8 @@ for i = 1:length(coursemappings),
         newEndSlot1 = currentCoursemapping.timeSlot + coursemappings(i).course.duration;
         newEndSlot2 = coursemappings(i).timeSlot + currentCoursemapping.course.duration;
         
+        % Make sure that swapping courses won't lead to one ending after
+        % the maximum number of timeslots available
         if newEndSlot1 <= schedule.timeslots && newEndSlot2 <= schedule.timeslots,
             newNeighbourMapping1 = CourseMapping(course, coursemappings(i).room, coursemappings(i).day, coursemappings(i).timeSlot);
             newNeighbourMapping2 = CourseMapping(coursemappings(i).course, currentCoursemapping.room, currentCoursemapping.day, currentCoursemapping.timeSlot);
@@ -144,6 +151,8 @@ for i = 1:length(coursemappings),
             newNeighbourSched = Schedule(newNeighbourMappings, days, timeslots);
             fitness = GetFitness(newNeighbourSched, students);
             
+            % Allow non-tabu'ed better solutions, or tabu'ed solutions
+            % better than the global best
             if (tabuList(course.courseID) == 0 && tabuList(i) == 0 && fitness < currentBestNeighbourFitness) || ...
                     ((tabuList(course.courseID) ~= 0 || tabuList(i) ~= 0) && fitness < aspirationFitness),
                 secondCourseTabu = coursemappings(i).course.courseID;

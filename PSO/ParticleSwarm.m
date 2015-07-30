@@ -25,8 +25,6 @@ for i = 1:numParticles,
     
     particles(i) =  Particle(particle, particle, fitness);
     
-    fprintf('part%d  best: %d  global: %d\n',i, fitness,globalBestFitness);
-    
     if fitness < globalBestFitness
         globalBestSol = particles(i).schedule;
         globalBestFitness = fitness;
@@ -38,27 +36,29 @@ for i = 1:iterations,
     bestPartFitness = Inf;
     for j = 1:numParticles,
         % Update particle
-        particles(j) = updateParticle(particles(j), globalBestSol, globalBestFitness, rooms, numDays, numTimeSlots);
-        % Get new personal bests
+        particles(j) = updateParticle(particles(j), globalBestSol, rooms, numDays, numTimeSlots);
         
+        % Get new personal bests
         fitness = GetFitness(particles(j).schedule, students, Khard, Ksoft, false);
         
+        % Update personal best if improved
         if fitness < particles(j).personalBestFitness,
             particles(j).personalBestSol = particles(j).schedule;
             particles(j).personalBestFitness = fitness;
         end
         
+        % Update best part if improved
         if fitness < bestPartFitness,
             bestPartSol = particles(j).schedule;
             bestPartFitness = fitness;
         end
     end
     
+    % Update global best if improved
     if bestPartFitness < globalBestFitness,
         globalBestSol = bestPartSol;
         globalBestFitness = bestPartFitness;
     end
-    fprintf('iter best: %d global best: %d\n', bestPartFitness, globalBestFitness);
     
 end
 
@@ -68,7 +68,7 @@ bestFitness = globalBestFitness;
 end
 
 
-function [ newParticle ] = updateParticle(particle, globalBestSol, globalBestFitness, rooms, numDays, numTimeSlots)
+function [ newParticle ] = updateParticle(particle, globalBestSol, rooms, numDays, numTimeSlots)
 
 noChange  = 0.1;
 random    = 0.2  + noChange;

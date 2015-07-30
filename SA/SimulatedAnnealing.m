@@ -39,7 +39,7 @@ while (T > T_min) && (j <= max_rej) && (E_new > F_min),
     % Check if max numbers of run/accept are met
     if (i >= max_run) || (accept >= max_accept),
         
-        % Cooling according to a cooling schedule
+        % Cooling according to a geometric cooling schedule
         T = T_init * (alpha ^ T_iteration);
         T_iteration = T_iteration + 1;
         
@@ -48,13 +48,12 @@ while (T > T_min) && (j <= max_rej) && (E_new > F_min),
         accept = 1;
     end
     
-    % Function evaluations at new locations
+    % Function evaluation at new location
     nextGuess = GetRandomNeighbour(guess, rooms);
     E_new = GetFitness(nextGuess, students);
-    % Decide to accept the new solution
     DeltaE = E_new - E_old;
     
-    % Accept if improved
+    % Accept new solution if improved
     if DeltaE < 0,
         guess = nextGuess;
         E_old = E_new;
@@ -62,7 +61,7 @@ while (T > T_min) && (j <= max_rej) && (E_new > F_min),
         j = 0;
     end
     
-    % Accept with a small probability if not improved
+    % Accept new solution with a small probability if not improved
     if (DeltaE >= 0) && (exp(-DeltaE / (k * T)) > rand),
         guess = nextGuess;
         E_old = E_new;
@@ -77,12 +76,9 @@ while (T > T_min) && (j <= max_rej) && (E_new > F_min),
     iter = iter + 1;
 end
 
+% Record global best
 bestFitness = min(fitnesses);
 bestSolutions = find(fitnesses == bestFitness);
 bestSolution = solutions(bestSolutions(end));
-
-% Display the final results
-fprintf('Evaluations:    %d\n', iter);
-fprintf('Best Objective: %d\n', max(fitnesses));
 
 end

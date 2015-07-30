@@ -52,7 +52,6 @@ for iter = 1:iterations,
     bestAntPath = 0;
     for i = 1:numAnts,
         fitness = GetFitness(ants(i), students, Khard, Ksoft, false);
-        fprintf ('Ant: %d -- fitness: %d -- best fitness: %d\n', i, fitness, bestFitness);
         if fitness < bestAntFitness,
             bestAntFitness = fitness;
             bestAntSol = ants(i);
@@ -72,16 +71,16 @@ end
 
 end
 
-function [ newPheromones ] = updatePheromones( pheromones, bestAntPath, bestFitness, rho, Q )
+function [ pheromones ] = updatePheromones( pheromones, bestAntPath, bestFitness, rho, Q )
 
-%evaporation
+% Evaporation
 pheromones = pheromones * (1 - rho);
 
-%add to the pheromones for the path of the best
+% Add to the pheromones for the path of the best
 for i = 1:length(bestAntPath)
     pheromones(i, bestAntPath(i)) = pheromones(i, bestAntPath(i)) + (Q/bestFitness);
 end
-newPheromones = pheromones;
+
 end
 
 
@@ -115,15 +114,15 @@ pathsChosen = zeros(1, length(acoNodes));
 for i = 1:length(acoNodes),
     
     % Get the overall value of pheromones for each path we could take
-    sumTotal = sum(pheromones(i,:));
+    sumTotal = sum(pheromones(i, :));
     
     % Calculate the percentages
-    probabilities = pheromones(i,:) ./ sumTotal;
+    probabilities = pheromones(i, :) ./ sumTotal;
     for j = 2:length(probabilities),
-        probabilities(j) = probabilities(j) + probabilities(j-1);
+        probabilities(j) = probabilities(j) + probabilities(j - 1);
     end
     
-    % Generate random number
+    % Generate random number for chosen paths
     randNum = rand;
     for j = 1:length(probabilities),
         if randNum <= probabilities(j),
