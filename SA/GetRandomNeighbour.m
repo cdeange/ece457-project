@@ -47,29 +47,46 @@ elseif randOperation < 2/3,
     
 else
     % Swap two courses
-    i = 1;
-    while true,
-        randMapping = randsample(schedule.courseMappings, 1);
-        randCourse = randMapping.course;
-        swapMapping = randsample(schedule.courseMappings, 1);
-        swapCourse = swapMapping.course;
-        
-        if swapCourse.courseID ~= randCourse.courseID,
-            newEndSlot1 = randMapping.timeSlot + swapMapping.course.duration;
-            newEndSlot2 = swapMapping.timeSlot + randMapping.course.duration;
+    exit = false;
+    randCourseIDs = randperm(length(schedule.courseMappings));
+    swapCourseIDs = randperm(length(schedule.courseMappings));
+    
+    % Look at all random possible combinations of unique courses to swap
+    for courseID = randCourseIDs,
+        for swapID = swapCourseIDs,
+            if courseID == swapID,
+                % Same course
+                continue;
+            end
+            
+            mapping1 = schedule.courseMappings(courseID);
+            mapping2 = schedule.courseMappings(swapID);
+            
+            newEndSlot1 = mapping1.timeSlot + mapping2.course.duration - 1;
+            newEndSlot2 = mapping2.timeSlot + mapping1.course.duration - 1;
             
             if newEndSlot1 <= schedule.timeslots && newEndSlot2 <= schedule.timeslots,
                 % Found two different courses that can be safely swapped
-                break
+                randMapping = mapping1;
+                randCourse = randMapping.course;
+                swapMapping = mapping2;
+                swapCourse = swapMapping.course;
+                
+                exit = true;
+                break;
             end
         end
         
-        i = i + 1;
-        if i >= 5000
-            % It is unlikely any two courses can be swapped :(
-            newSchedule = schedule;
-            return
+        if exit,
+            break;
         end
+    end
+    
+    if ~exit,
+        % Solution was not found, we could not swap ANY two courses safely.
+        % Highly unlikely, but still possible! Return the original schedule.
+        newSchedule = schedule;
+        return;
     end
     
     newMapping1 = CourseMapping(randCourse, swapMapping.room, swapMapping.day, swapMapping.timeSlot);
