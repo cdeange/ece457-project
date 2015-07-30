@@ -1,6 +1,8 @@
 classdef Student
-    %STUDENT Summary of this class goes here
-    %   Detailed explanation goes here
+    % Student An individual who attends classes
+    %
+    %       studentID Number
+    % enrolledCourses List(Course)
     
     properties
         studentID

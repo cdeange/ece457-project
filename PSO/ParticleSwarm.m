@@ -1,11 +1,24 @@
 function [ bestSolution bestFitness ] = ParticleSwarm( numParticles, numDays, numTimeSlots, courses, rooms, students, iterations, Khard, Ksoft )
+    % ParticleSwarm Algorithm to find best schedule
+    % 
+    %  numParticles Number
+    %       numDays Number
+    %  numTimeSlots Number
+    %    courses List(Course)
+    %      rooms List(Classroom)
+    %   students List(Student)
+    % iterations Number
+    %      Khard Number
+    %      Ksoft Number
+    % 
+    % Returns the best fitness and solutions for the inputs
 
     particles = Particle.empty(numParticles,0);
     
     globalBestSol = 0;
     globalBestFitness = Inf;
     
-    %initialize particles
+    % Initialize particles
     for i = 1:numParticles
         particle = GenerateInitialSolution(numDays, numTimeSlots, courses, rooms);
         fitness = GetFitness(particle, students, Khard, Ksoft, false);
@@ -20,38 +33,33 @@ function [ bestSolution bestFitness ] = ParticleSwarm( numParticles, numDays, nu
         end
     end
     
-    
-    
-    %do while
-    for i = 1:iterations
+    for i = 1:iterations,
         bestPartSol = 0;
         bestPartFitness = Inf;
-        for j = 1:numParticles
-            %update particle
-%             fprintf('\npart%d\n',j);
+        for j = 1:numParticles,
+            % Update particle
             particles(j) = updateParticle(particles(j), globalBestSol, globalBestFitness, rooms, numDays, numTimeSlots);
-            %get new personal bests
+            % Get new personal bests
             
             fitness = GetFitness(particles(j).schedule, students, Khard, Ksoft, false);
             
-            if fitness < particles(j).personalBestFitness
+            if fitness < particles(j).personalBestFitness,
                 particles(j).personalBestSol = particles(j).schedule;
                 particles(j).personalBestFitness = fitness;
             end
             
-            if fitness < bestPartFitness
+            if fitness < bestPartFitness,
                 bestPartSol = particles(j).schedule;
                 bestPartFitness = fitness;
             end        
         end
         
-        if bestPartFitness < globalBestFitness
+        if bestPartFitness < globalBestFitness,
             globalBestSol = bestPartSol;
             globalBestFitness = bestPartFitness;
         end  
         fprintf('iter best: %d global best: %d\n',bestPartFitness,globalBestFitness);
-        
-        
+    
     end
     
     bestSolution = globalBestSol;
@@ -60,70 +68,59 @@ function [ bestSolution bestFitness ] = ParticleSwarm( numParticles, numDays, nu
 end
 
 function [ newParticle ] = updateParticle(particle, globalBestSol, globalBestFitness, rooms, numDays, numTimeSlots)
-%      noChange = 0.097;
-%      random = 0.03;
-%      takePbest = 0.3;
-%      takegBest = 0.6;
-    
-     noChange = 0.1;
-     random = 0.3;
-     takePbest = 0.35;
-     takegBest = 0.35;
 
+    noChange  = 0.1;
+    random    = 0.3;
+    takePbest = 0.35;
+    takegBest = 0.35;
+    
     coursemappings = particle.schedule.courseMappings;
     
-    for i = 1:length(coursemappings)
-        %day
-%         fprintf('\ncourse%d\n',i);
+    for i = 1:length(coursemappings),
+        
+        % Day
         randOp = rand;
-        if randOp <= noChange
-%             fprintf('no day change\n');
-        elseif randOp < random
-            randDay = round(numDays * rand + 0.5);
-%             fprintf('randday: %d\n', randDay);
+        
+        if randOp <= noChange,
+            % No day change
+        elseif randOp < random,
+            randDay = randi([1, numDays], 1);
             coursemappings(i).day = randDay;
-        elseif randOp <= takePbest
-%             fprintf('pbest day: %d\n', particle.personalBestSol.courseMappings(i).day);
+        elseif randOp <= takePbest,
             coursemappings(i).day = particle.personalBestSol.courseMappings(i).day;
         else
-%             fprintf('gbest day: %d\n', globalBestSol.courseMappings(i).day);
             coursemappings(i).day = globalBestSol.courseMappings(i).day;
         end
         
-        %timeslot
+        % Timeslot
         randOp = rand;
         maxTimeslot = numTimeSlots - coursemappings(i).course.duration + 1;
         
-        if randOp <= noChange
-%             fprintf('no ts change\n');
-        elseif randOp <= random
-            randTimeSlot = round(maxTimeslot * rand + 0.5);
-%             fprintf('randts: %d\n', randTimeSlot);
+        if randOp <= noChange,
+            % No timeslot change
+        elseif randOp <= random,
+            randTimeSlot = randi([1, maxTimeslot], 1);
             coursemappings(i).timeSlot = randTimeSlot;
-        elseif randOp <= takePbest
-%             fprintf('pbest room: %d\n', particle.personalBestSol.courseMappings(i).timeSlot);
+        elseif randOp <= takePbest,
             coursemappings(i).timeSlot = particle.personalBestSol.courseMappings(i).timeSlot;
         else
-%             fprintf('gbest ts: %d\n', globalBestSol.courseMappings(i).timeSlot);
             coursemappings(i).timeSlot = globalBestSol.courseMappings(i).timeSlot;
         end
         
-        %room
+        % Room
         randOp = rand;
         
-        if randOp <= noChange
-%             fprintf('no room change\n');
-        elseif randOp <= random
+        if randOp <= noChange,
+            % No room change
+        elseif randOp <= random,
             randRoom = randsample(rooms, 1);
-%             fprintf('rand room: %d\n', randRoom.roomID);
             coursemappings(i).room = randRoom;
-        elseif randOp <= takePbest
-%             fprintf('pbest room: %d\n', particle.personalBestSol.courseMappings(i).room.roomID);
+        elseif randOp <= takePbest,
             coursemappings(i).room = particle.personalBestSol.courseMappings(i).room;
         else
-%             fprintf('gbest room: %d\n', globalBestSol.courseMappings(i).room.roomID);
             coursemappings(i).room = globalBestSol.courseMappings(i).room;
         end
+        
     end
     
     sched = Schedule(coursemappings, numDays, numTimeSlots);

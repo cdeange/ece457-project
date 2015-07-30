@@ -1,6 +1,11 @@
 classdef CourseMapping
-    %COURSEMAPPING Summary of this class goes here
-    %   Detailed explanation goes here
+    % CourseMapping Defines the relationship between a course and its
+    %
+    % room/date/time
+    %   course Course
+    %     room Classroom
+    %      day Number
+    % timeSlot Number
     
     properties
         course

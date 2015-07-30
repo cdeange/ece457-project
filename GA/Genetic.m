@@ -1,4 +1,14 @@
 function [ bestFitness bestSolution fitnesses solutions ] = Genetic( courses, students, rooms, days, timeslots )
+% Genetic Algorithm to find best schedule
+% 
+%   courses List(Course)
+%  students List(Student)
+%     rooms List(Classroom)
+%      days Number
+% timeslots Number
+% 
+% Returns the best fitness and solutions for the inputs
+
 
 global last;
 
@@ -51,7 +61,6 @@ for i = 1:MaxGen,
     
     % Record the current best
     fitnesses(i) = max(fitness);
-    fitnesses(i)
     solutions(i) = last(popnew(fitnesses(i) == fitness));
 end
 

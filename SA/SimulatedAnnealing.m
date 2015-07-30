@@ -1,7 +1,12 @@
 function [ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing( schedule, rooms, students )
-%SIMULATEDANNEALING Summary of this function goes here
-%   Detailed explanation goes here
-%   Simulated Annealing (Adapted from X-S Yang, Cambridge University)
+% SimulatedAnnealing Algorithm to find best schedule
+% (Adapted from X-S Yang, Cambridge University)
+% 
+% schedule Schedule
+%    rooms List(Classroom)
+% students List(Student)
+% 
+% Returns the best fitness and solutions for the inputs
 
 % Initializing parameters and settings
 T_min = 1;        % Final stopping temperature

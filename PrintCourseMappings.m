@@ -1,4 +1,10 @@
 function PrintCourseMappings( students, courseCount, reverse )
+% PrintCourseMappings Prints the list of courses mapped to students, or
+% vice versa if specified
+%
+%    students List(Student)
+% courseCount Number
+%     reverse (optional) Logical
 
 if nargin < 3
     reverse = false;

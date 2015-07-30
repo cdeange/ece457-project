@@ -1,4 +1,11 @@
 function [ Courses Students Rooms Teachers numDays numTimeslots ] = ReadInput( file )
+% ReadInput Reads in a formatted CSV file to parse input
+%
+% file String
+%
+% Returns the created list of courses, students, rooms, and teachers.
+% Also reads the defined number of days and timeslots
+
 global lines;
 
 % Read all the values into a cell array, one entry per line

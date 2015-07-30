@@ -1,24 +1,26 @@
 function [ initialSchedule ] = GenerateInitialSolution( numDays, numTimeSlots, courses, rooms )
-%GENERATEINITIALSOLUTION Summary of this function goes here
-%   Detailed explanation goes here
-% [initialSchedule] = GenerateInitialSolution(5,6, courses, students,
-% rooms,teachers, events)
-% create and return schedule with the inputs given
+% GenerateInitialSolution Create a random solution for a given course list
+%
+%      numDays Number
+% numTimeSlots Number
+%      courses List(Course)
+%        rooms List(Classroom)
+% 
+% Returns a schedule with the randomly-generated course mappings
     
     numCourses = length(courses);
     coursemappings = CourseMapping.empty(numCourses,0);
     
-    for i = 1:length(courses)
-        % random room, day, timeslot (from 1 to numTimeslots - duration)
+    for i = 1:numCourses
+        % Random room, day, valid timeslot (from 1 to numTimeSlots - duration)
         randRoom = randsample(rooms, 1);
-        randDay = round(numDays * rand + 0.5);
+        randDay = randi([1, numDays], 1);
         validTimeSlots = numTimeSlots - courses(i).duration + 1;
-        randTimeSlot = round(validTimeSlots * rand + 0.5);
-    
+        randTimeSlot = randi([1, validTimeSlots], 1);
+        
         coursemappings(i) = CourseMapping(courses(i), randRoom, randDay, randTimeSlot);
     end
     
     initialSchedule = Schedule(coursemappings, numDays, numTimeSlots);
-
+    
 end
-

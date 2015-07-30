@@ -1,6 +1,9 @@
 function [ conflictCount ] = HardConstraintStudentCourseConflict( conflictingCourseMappings )
-%HARDCONSTRAINTSTUDENTCOURSECONFLICT Summary of this function goes here
-%   Detailed explanation goes here
+% HardConstraintStudentCourseConflict Determines double-booked students
+%
+% conflictingCourseMappings List(Pair(CourseMapping, CourseMapping))
+%
+% Returns the number of times this constraint is not met
 
 conflictCount = 0;
 

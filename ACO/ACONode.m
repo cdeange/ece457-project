@@ -1,4 +1,9 @@
-classdef ACONode    
+classdef ACONode
+    % ACONode A single node for Ant Colony Optimization
+    %
+    %      course Course
+    % pathsToNext List(CourseMapping)
+    
     properties
         course
         pathsToNext

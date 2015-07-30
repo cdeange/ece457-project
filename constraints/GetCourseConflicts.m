@@ -1,4 +1,10 @@
 function [ conflicts ] = GetCourseConflicts( schedule )
+% GetCourseConflicts Determines conflicts between courses
+%
+% schedule Schedule
+%
+% Returns the list of pairs of courses with time-based conflicts.
+% Does not take rooms into account.
 
 mappings = schedule.courseMappings;
 conflicts = {};

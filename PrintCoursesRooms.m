@@ -1,6 +1,8 @@
 function PrintCoursesRooms( schedule, students )
-%PRINTCOURSESROOMS Summary of this function goes here
-%   Detailed explanation goes here
+    % PrintCoursesRoomns Prints info about courses and the rooms they're in
+    %
+    % schedule Schedule
+    % students List(Student)
 
     coursemappings = [schedule.courseMappings];
     

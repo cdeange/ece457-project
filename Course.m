@@ -1,6 +1,12 @@
 classdef Course
-    %COURSE Summary of this class goes here
-    %   Detailed explanation goes here
+    % Course A single course that students take and teachers teach
+    %
+    %       courseID Number
+    %    featuresReq List(Number)
+    %       duration Number
+    %     courseType 'M' or 'C'
+    %        teacher Number
+    % studentsTaking List(Number)
     
     properties
         courseID

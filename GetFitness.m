@@ -1,4 +1,13 @@
 function [ fitness fitnessHard fitnessSoft ] = GetFitness( schedule, students, Khard, Ksoft, verbose )
+% GetFitness Calculates the fitness of a given solution
+%
+% schedule Schedule
+% students List(Student)
+%    Khard (optional) Number
+%    Ksoft (optional) Number
+%  verbose (optional) Logical
+%
+% Returns total, hard, and soft fitnesses of the solution
 
 if nargin < 5,
     verbose = false;
@@ -18,12 +27,14 @@ end
 
 conflicts = GetCourseConflicts(schedule);
 
+% Hard constraints
 studentConflicts   = HardConstraintStudentCourseConflict(conflicts);
 teacherConflicts   = HardConstraintTeacherCourseConflict(conflicts);
 classroomConflicts = HardConstraintClassroomConflicts(conflicts);
 capacityIssues     = HardConstraintClassroomCapacity(schedule, students);
 requirementIssues  = HardConstraintClassRequirements(schedule);
 
+% Soft constraints
 oneCoursePerDay = SoftConstraintOneCourseInDay(schedule, students);
 lastTimeslot = SoftConstraintLastTimeslot(schedule);
 
@@ -37,6 +48,7 @@ if verbose,
     fprintf('Last Timeslot: %d\n', lastTimeslot);
 end
 
+% Scale constraints by Khard and Ksoft
 fitnessHard = studentConflicts + teacherConflicts + classroomConflicts + capacityIssues + requirementIssues;
 fitnessSoft = oneCoursePerDay + lastTimeslot;
 

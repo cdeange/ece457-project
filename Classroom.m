@@ -1,6 +1,9 @@
 classdef Classroom
-    %ROOM Summary of this class goes here
-    %   Detailed explanation goes here
+    % Classroom Represents a room that a course/event can be taken in
+    %
+    %   roomID Number
+    % features List(Number)
+    % capacity Number
     
     properties
         roomID

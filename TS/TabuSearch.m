@@ -1,4 +1,13 @@
 function [ globalBestFitness globalBestSolution fitnesses solutions ] = TabuSearch( schedule, rooms, tabuListLength, students, maxIterations )
+    % TabuSearch Algorithm to find best schedule
+    % 
+    %       schedule Schedule
+    %          rooms List(Classroom)
+    % tabuListLength Number
+    %       students List(Student)
+    %  maxIterations Number
+    % 
+    % Returns the best fitness and solutions for the inputs
     
     bestSolution = schedule;
     bestFitness = Inf;
@@ -9,9 +18,11 @@ function [ globalBestFitness globalBestSolution fitnesses solutions ] = TabuSear
     fitnesses = zeros(maxIterations, 1);
     solutions = Schedule.empty(maxIterations, 0);
     
-    iterations = 1;
-    while iterations <= maxIterations,
+    for iterations = 1:maxIterations,
         
+        % Find best neighbour of current schedule and move to it
+        % Aspiration allows a solution better than global best to be taken,
+        % even if the solution is currently tabu'ed
         [ bestSolution bestFitness tabuList ] = ...
             getBestNeighbourForSchedule( bestSolution, globalBestFitness, rooms, tabuList, tabuListLength, students );
         
@@ -24,7 +35,6 @@ function [ globalBestFitness globalBestSolution fitnesses solutions ] = TabuSear
             fprintf('iterations = %d, global best fitness = %d\n', iterations, globalBestFitness);
         end
         
-        iterations = iterations + 1;
     end
     
 end
@@ -37,6 +47,7 @@ function [ bestNeighbourSolution bestNeighbourFitness tabuList ] = getBestNeighb
     bestNeighbourIndex = 0;
     bestNeighbourSwapIndex = 0;
     
+    % Find the best neighbour of each course and return the best
     for k = 1:length(schedule.courseMappings)
         [neighbourSched fitness secondCourseTabu] = getBestNeighbour(schedule, aspirationFitness, k, rooms, tabuList, students);
 
@@ -49,9 +60,15 @@ function [ bestNeighbourSolution bestNeighbourFitness tabuList ] = getBestNeighb
 
     end
     
+    if isinf(bestNeighbourFitness),
+        bestNeighbourFitness = GetFitness(bestNeighbourSolution, students);
+    end
+    
+    % Evaporate tabu list
     tabuList = tabuList - 1;
     tabuList(tabuList < 0) = 0;
     
+    % Add new course(s), if necessary, to tabu list
     if bestNeighbourIndex ~= 0,
         tabuList(bestNeighbourIndex) = tabuListLength;
         if bestNeighbourSwapIndex ~= 0
@@ -73,10 +90,10 @@ function [bestNeighbourSched bestNeighbourFitness secondCourseTabu] = getBestNei
     days = schedule.days;
     timeslots = schedule.timeslots;
     
-    % find best of moving
-    for i = 1:days
-        for j = 1 : timeslots - duration + 1
-            if (i ~= currentCoursemapping.day || j ~= currentCoursemapping.timeSlot)
+    % Find best of moving day/time
+    for i = 1:days,
+        for j = 1:(timeslots - duration + 1),
+            if (i ~= currentCoursemapping.day || j ~= currentCoursemapping.timeSlot),
                 newNeighbourMapping = CourseMapping(course, currentCoursemapping.room, i, j);
                 newNeighbourMappings = coursemappings;
                 newNeighbourMappings(currentCourse) = newNeighbourMapping;
@@ -84,7 +101,7 @@ function [bestNeighbourSched bestNeighbourFitness secondCourseTabu] = getBestNei
                 fitness = GetFitness(newNeighbourSched, students);
                 
                 if (tabuList(course.courseID) == 0 && fitness < currentBestNeighbourFitness) || ...
-                        (tabuList(course.courseID) ~= 0 && fitness < aspirationFitness)
+                        (tabuList(course.courseID) ~= 0 && fitness < aspirationFitness),
                     secondCourseTabu = 0;
                     currentBestNeighbour = newNeighbourSched;
                     currentBestNeighbourFitness = fitness;
@@ -93,9 +110,9 @@ function [bestNeighbourSched bestNeighbourFitness secondCourseTabu] = getBestNei
         end
     end
     
-    % find best of swapping room
-    for i = 1:length(rooms)
-        if (currentCoursemapping.room.roomID ~= rooms(i).roomID)
+    % Find best of swapping room
+    for i = 1:length(rooms),
+        if (currentCoursemapping.room.roomID ~= rooms(i).roomID),
             newNeighbourMapping = CourseMapping(course, rooms(i), currentCoursemapping.day, currentCoursemapping.timeSlot);
             newNeighbourMappings = coursemappings;
             newNeighbourMappings(currentCourse) = newNeighbourMapping;
@@ -103,7 +120,7 @@ function [bestNeighbourSched bestNeighbourFitness secondCourseTabu] = getBestNei
             fitness = GetFitness(newNeighbourSched, students);
             
             if (tabuList(course.courseID) == 0 && fitness < currentBestNeighbourFitness) || ...
-                    (tabuList(course.courseID) ~= 0 && fitness < aspirationFitness)
+                    (tabuList(course.courseID) ~= 0 && fitness < aspirationFitness),
                 secondCourseTabu = 0;
                 currentBestNeighbour = newNeighbourSched;
                 currentBestNeighbourFitness = fitness;
@@ -111,9 +128,9 @@ function [bestNeighbourSched bestNeighbourFitness secondCourseTabu] = getBestNei
         end
     end
     
-    % find best of swapping with other class
-    for i = 1:length(coursemappings)
-        if coursemappings(i).course.courseID ~= course.courseID
+    % Find best of swapping with other class
+    for i = 1:length(coursemappings),
+        if coursemappings(i).course.courseID ~= course.courseID,
             
             newEndSlot1 = currentCoursemapping.timeSlot + coursemappings(i).course.duration;
             newEndSlot2 = coursemappings(i).timeSlot + currentCoursemapping.course.duration;
@@ -128,7 +145,7 @@ function [bestNeighbourSched bestNeighbourFitness secondCourseTabu] = getBestNei
                 fitness = GetFitness(newNeighbourSched, students);
                 
                 if (tabuList(course.courseID) == 0 && tabuList(i) == 0 && fitness < currentBestNeighbourFitness) || ...
-                        ((tabuList(course.courseID) ~= 0 || tabuList(i) ~= 0) && fitness < aspirationFitness)
+                        ((tabuList(course.courseID) ~= 0 || tabuList(i) ~= 0) && fitness < aspirationFitness),
                     secondCourseTabu = coursemappings(i).course.courseID;
                     currentBestNeighbour = newNeighbourSched;
                     currentBestNeighbourFitness = fitness;
@@ -138,7 +155,7 @@ function [bestNeighbourSched bestNeighbourFitness secondCourseTabu] = getBestNei
         end
     end
     
-    % set return
+    % Set returns
     bestNeighbourSched = currentBestNeighbour;
     bestNeighbourFitness = currentBestNeighbourFitness;
     

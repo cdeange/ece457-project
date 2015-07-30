@@ -1,6 +1,8 @@
 classdef Teacher
-    %TEACHER Summary of this class goes here
-    %   Detailed explanation goes here
+    % Teacher An individual who teaches classes
+    %
+    %     teacherID Number
+    % classesTaught List(Course)
     
     properties
         teacherID
