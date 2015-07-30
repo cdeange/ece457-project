@@ -13,13 +13,13 @@ function [ bestSolution bestFitness ] = ParticleSwarm( numParticles, numDays, nu
     % 
     % Returns the best fitness and solutions for the inputs
 
-    particles = Particle.empty(numParticles,0);
+    particles = Particle.empty(numParticles, 0);
     
     globalBestSol = 0;
     globalBestFitness = Inf;
     
     % Initialize particles
-    for i = 1:numParticles
+    for i = 1:numParticles,
         particle = GenerateInitialSolution(numDays, numTimeSlots, courses, rooms);
         fitness = GetFitness(particle, students, Khard, Ksoft, false);
         
@@ -58,7 +58,7 @@ function [ bestSolution bestFitness ] = ParticleSwarm( numParticles, numDays, nu
             globalBestSol = bestPartSol;
             globalBestFitness = bestPartFitness;
         end  
-        fprintf('iter best: %d global best: %d\n',bestPartFitness,globalBestFitness);
+        fprintf('iter best: %d global best: %d\n', bestPartFitness, globalBestFitness);
     
     end
     
@@ -67,12 +67,13 @@ function [ bestSolution bestFitness ] = ParticleSwarm( numParticles, numDays, nu
 
 end
 
+
 function [ newParticle ] = updateParticle(particle, globalBestSol, globalBestFitness, rooms, numDays, numTimeSlots)
 
     noChange  = 0.1;
-    random    = 0.3;
-    takePbest = 0.35;
-    takegBest = 0.35;
+    random    = 0.2  + noChange;
+    takePbest = 0.35 + random;
+    takegBest = 0.35 + takePbest; %#ok unused since this is the 'else' case
     
     coursemappings = particle.schedule.courseMappings;
     
@@ -83,7 +84,7 @@ function [ newParticle ] = updateParticle(particle, globalBestSol, globalBestFit
         
         if randOp <= noChange,
             % No day change
-        elseif randOp < random,
+        elseif randOp <= random,
             randDay = randi([1, numDays], 1);
             coursemappings(i).day = randDay;
         elseif randOp <= takePbest,
@@ -123,8 +124,7 @@ function [ newParticle ] = updateParticle(particle, globalBestSol, globalBestFit
         
     end
     
-    sched = Schedule(coursemappings, numDays, numTimeSlots);
-    
-    newParticle = Particle(sched, particle.personalBestSol, particle.personalBestFitness);
+    newSchedule = Schedule(coursemappings, numDays, numTimeSlots);
+    newParticle = Particle(newSchedule, particle.personalBestSol, particle.personalBestFitness);
 end
 
