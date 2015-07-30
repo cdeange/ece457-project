@@ -1,11 +1,11 @@
 function [ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing( schedule, rooms, students )
 % SimulatedAnnealing Algorithm to find best schedule
 % (Adapted from X-S Yang, Cambridge University)
-% 
+%
 % schedule Schedule
 %    rooms List(Classroom)
 % students List(Student)
-% 
+%
 % Returns the best fitness and solutions for the inputs
 
 % Initializing parameters and settings
@@ -35,19 +35,19 @@ iter = 1;
 % Starting the simulated annealling
 while (T > T_min) && (j <= max_rej) && (E_new > F_min),
     i = i + 1;
-
+    
     % Check if max numbers of run/accept are met
     if (i >= max_run) || (accept >= max_accept),
-
+        
         % Cooling according to a cooling schedule
         T = T_init * (alpha ^ T_iteration);
         T_iteration = T_iteration + 1;
-
+        
         % Reset the counters
         i = 1;
         accept = 1;
     end
-
+    
     % Function evaluations at new locations
     nextGuess = GetRandomNeighbour(guess, rooms);
     E_new = GetFitness(nextGuess, students);
@@ -61,7 +61,7 @@ while (T > T_min) && (j <= max_rej) && (E_new > F_min),
         accept = accept + 1;
         j = 0;
     end
-
+    
     % Accept with a small probability if not improved
     if (DeltaE >= 0) && (exp(-DeltaE / (k * T)) > rand),
         guess = nextGuess;
@@ -70,7 +70,7 @@ while (T > T_min) && (j <= max_rej) && (E_new > F_min),
     else
         j = j + 1;
     end
-
+    
     solutions(iter) = guess; %#ok
     fitnesses(iter) = E_old; %#ok
     

@@ -31,6 +31,6 @@ addpath(strcat(pwd, '/GA'));
 addpath(strcat(pwd, '/ACO'));
 addpath(strcat(pwd, '/PSO'));
 
-% [ bestFitness bestSolution fitnesses solutions ] = TabuSearch(schedule, rooms, 10, students, 10)
+[ bestFitness bestSolution fitnesses solutions ] = TabuSearch(schedule, rooms, 10, students, 10)
 % [ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing(schedule, rooms, students)
-[ bestFitness bestSolution fitnesses solutions ] = Genetic(courses, students, rooms, days, timeslots);
+% [ bestFitness bestSolution fitnesses solutions ] = Genetic(courses, students, rooms, days, timeslots);

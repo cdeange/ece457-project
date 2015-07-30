@@ -1,6 +1,6 @@
 function [ newSchedule ] = GetRandomNeighbour( schedule, rooms )
 % GetRandomNeighbour Returns a random neighbour of a schedule solution.
-% 
+%
 % schedule Schedule
 %    rooms List(Classroom)
 %
@@ -29,7 +29,7 @@ if randOperation < 1/3,
     newMappings = schedule.courseMappings;
     newMappings(randCourse.courseID) = newMapping;
     newSchedule = Schedule(newMappings, days, timeslots);
-
+    
 elseif randOperation < 2/3,
     % Change room
     randMapping = randsample(schedule.courseMappings, 1);
@@ -44,7 +44,7 @@ elseif randOperation < 2/3,
     newMappings = schedule.courseMappings;
     newMappings(randCourse.courseID) = newMapping;
     newSchedule = Schedule(newMappings, days, timeslots);
-
+    
 else
     % Swap two courses
     i = 1;
@@ -57,7 +57,7 @@ else
         if swapCourse.courseID ~= randCourse.courseID,
             newEndSlot1 = randMapping.timeSlot + swapMapping.course.duration;
             newEndSlot2 = swapMapping.timeSlot + randMapping.course.duration;
-
+            
             if newEndSlot1 <= schedule.timeslots && newEndSlot2 <= schedule.timeslots,
                 % Found two different courses that can be safely swapped
                 break

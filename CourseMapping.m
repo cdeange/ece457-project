@@ -16,12 +16,12 @@ classdef CourseMapping
     
     methods
         function coursemapping = CourseMapping(course, room, day, timeSlot)
-           if nargin > 0
-              coursemapping.course = course;
-              coursemapping.room = room;
-              coursemapping.day = day;
-              coursemapping.timeSlot = timeSlot;
-           end
+            if nargin > 0
+                coursemapping.course = course;
+                coursemapping.room = room;
+                coursemapping.day = day;
+                coursemapping.timeSlot = timeSlot;
+            end
         end
     end
     

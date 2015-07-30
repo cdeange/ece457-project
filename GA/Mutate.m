@@ -1,6 +1,6 @@
 function [ child ] = Mutate( parent, pm, rooms )
 % Mutate Mutates a parent schedule
-% 
+%
 % parent Schedule
 %     pm Number
 %  rooms List(Classroom)

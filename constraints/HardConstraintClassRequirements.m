@@ -15,6 +15,7 @@ for i = 1:length(coursemappings),
     roomFeat = coursemappings(i).room.features;
     isSubset = all(ismember(courseReqs, roomFeat));
     if isSubset ~= 1,
+        % Unsatisfied requirements detected!
         numUnmetRequirements = numUnmetRequirements + 1;
     end
 end

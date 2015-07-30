@@ -11,10 +11,10 @@ classdef Teacher
     
     methods
         function teacher = Teacher(teacherID, classesTaught)
-           if nargin > 0
-               teacher.teacherID = teacherID;
-               teacher.classesTaught = classesTaught;
-           end
+            if nargin > 0
+                teacher.teacherID = teacherID;
+                teacher.classesTaught = classesTaught;
+            end
         end
     end
     

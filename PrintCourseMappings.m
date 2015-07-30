@@ -27,9 +27,9 @@ else
         for course = student.enrolledCourses,
             nonZeroIndices = find(courses(:, course.courseID));
             if isempty(nonZeroIndices),
-               nextIndex = 1;
+                nextIndex = 1;
             else
-               nextIndex = nonZeroIndices(end) + 1;
+                nextIndex = nonZeroIndices(end) + 1;
             end
             
             courses(nextIndex, course.courseID) = student.studentID;
@@ -40,7 +40,7 @@ else
         studentsInCourse = courses(:, i);
         fprintf('Course %2d:', i);
         studentIndices = find(studentsInCourse);
-        for index = studentIndices, 
+        for index = studentIndices,
             fprintf(' %4d', studentsInCourse(index));
         end
         fprintf('\n');

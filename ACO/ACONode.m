@@ -10,11 +10,11 @@ classdef ACONode
     end
     
     methods
-         function aconode = ACONode(course, pathsToNext)
-           if nargin > 0
-              aconode.course = course; 
-              aconode.pathsToNext = pathsToNext;
-           end
+        function aconode = ACONode(course, pathsToNext)
+            if nargin > 0
+                aconode.course = course;
+                aconode.pathsToNext = pathsToNext;
+            end
         end
     end
     

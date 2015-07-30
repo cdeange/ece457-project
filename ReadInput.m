@@ -35,24 +35,24 @@ Teachers = Teacher.empty(numTeachers, 0);
 
 
 for i = 1:numRooms
-   Rooms(i) = createRoom(lines, offsetRooms - 1, i); 
+    Rooms(i) = createRoom(lines, offsetRooms - 1, i);
 end
 
 for i = 1:numCourses
-   Courses(i) = createCourse(lines, offsetCourses - 1, i); 
+    Courses(i) = createCourse(lines, offsetCourses - 1, i);
 end
 
 for i = 1:numTeachers
-   [ Teachers(i) Courses ] = createTeacher(lines, offsetTeachers - 1, i, Courses);
+    [ Teachers(i) Courses ] = createTeacher(lines, offsetTeachers - 1, i, Courses);
 end
 
 for i = 1:numStudents
-   [ Students(i) Courses ] = createStudent(lines, offsetStudents - 1, i, Courses); 
+    [ Students(i) Courses ] = createStudent(lines, offsetStudents - 1, i, Courses);
 end
 
 for i = 1:numEvents
-   [ Courses(numCourses + i) Students Teachers ] = ...
-       createEvent(lines, offsetEvents - 1, i, numCourses, Students, Teachers); 
+    [ Courses(numCourses + i) Students Teachers ] = ...
+        createEvent(lines, offsetEvents - 1, i, numCourses, Students, Teachers);
 end
 
 end

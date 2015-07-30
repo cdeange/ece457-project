@@ -14,11 +14,11 @@ classdef Schedule
     
     methods
         function schedule = Schedule(courseMappings, days, timeslots)
-           if nargin > 0
-              schedule.courseMappings = courseMappings; 
-              schedule.days = days;
-              schedule.timeslots = timeslots;
-           end
+            if nargin > 0
+                schedule.courseMappings = courseMappings;
+                schedule.days = days;
+                schedule.timeslots = timeslots;
+            end
         end
     end
     

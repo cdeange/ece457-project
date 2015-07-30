@@ -19,14 +19,14 @@ classdef Course
     
     methods
         function course = Course(courseID, featuresReq, duration, courseType, teacher, studentsTaking)
-           if nargin > 0
-              course.courseID = courseID;
-              course.featuresReq = featuresReq;
-              course.duration = duration;
-              course.courseType = courseType;
-              course.teacher = teacher;
-              course.studentsTaking = studentsTaking;
-           end
+            if nargin > 0
+                course.courseID = courseID;
+                course.featuresReq = featuresReq;
+                course.duration = duration;
+                course.courseType = courseType;
+                course.teacher = teacher;
+                course.studentsTaking = studentsTaking;
+            end
         end
     end
     

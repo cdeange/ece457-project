@@ -13,11 +13,11 @@ classdef Classroom
     
     methods
         function room = Classroom(roomID, features, capacity)
-           if nargin > 0
-              room.roomID = roomID;
-              room.features = features;
-              room.capacity = capacity;
-           end
+            if nargin > 0
+                room.roomID = roomID;
+                room.features = features;
+                room.capacity = capacity;
+            end
         end
     end
     
