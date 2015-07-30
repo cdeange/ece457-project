@@ -9,12 +9,8 @@ function [ bestFitness bestSolution fitnesses solutions ] = Genetic( courses, st
 % 
 % Returns the best fitness and solutions for the inputs
 
-
-global last;
-
-% An anonymous function to get the last index of a matrix
+% Anonymous function to get the last index of a matrix
 last = @(A) A(end);
-
 
 % Initializing the parameters
 popsize = 40; % Population size
