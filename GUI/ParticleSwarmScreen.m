@@ -165,10 +165,14 @@ Ksoft = 1;
     
 set(handles.Particle_Start,'Enable', 'off')
 set(handles.Back_Button,'Enable', 'off')
-[ bestSolution bestFitness ] = ParticleSwarm(getNumParticles(), days, timeslots, courses, rooms, students, getNumIterations(), getNoChangeProb(), getRandomProb(), getPbestProb(), getGbestProb(), Khard, Ksoft, handles);
+[ bestSolution bestFitness fitnesses solutions ] = ParticleSwarm(getNumParticles(), days, timeslots, courses, rooms, students, getNumIterations(), getNoChangeProb(), getRandomProb(), getPbestProb(), getGbestProb(), Khard, Ksoft, handles);
 set(handles.Cur_Best_label,'String', 'Best Fitness');
 
 PrintSchedule(bestSolution);
+
+figure
+plot(fitnesses');
+
 set(handles.Particle_Start,'Enable', 'on')
 set(handles.Back_Button,'Enable', 'on')
 

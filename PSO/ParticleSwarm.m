@@ -1,4 +1,4 @@
-function [ bestSolution bestFitness ] = ParticleSwarm( numParticles, numDays, numTimeSlots, courses, rooms, students, iterations, noChangeProb, randomProb, pbestProb, gbestProb, Khard, Ksoft, handle )
+function [ bestSolution bestFitness fitnesses solutions ] = ParticleSwarm( numParticles, numDays, numTimeSlots, courses, rooms, students, iterations, noChangeProb, randomProb, pbestProb, gbestProb, Khard, Ksoft, handle )
 % ParticleSwarm Algorithm to find best schedule
 %
 % numParticles Number
@@ -62,7 +62,11 @@ for i = 1:iterations
     if bestPartFitness < globalBestFitness
         globalBestSol = bestPartSol;
         globalBestFitness = bestPartFitness;
-    end  
+    end
+    
+    fitnesses(i) = globalBestFitness; %#ok
+    solutions(i) = globalBestSol; %#ok
+    
     fprintf('iter: %d best: %d global best: %d\n',i,bestPartFitness,globalBestFitness);
     set(handle.Cur_Iter_val,'String', int2str(i));
     set(handle.Cur_Best_val,'String', int2str(globalBestFitness));

@@ -152,11 +152,15 @@ set(handles.Back_Button,'Enable', 'off')
 Khard = 1000;
 Ksoft = 1;
 
-[bestSolution bestFitness] = AntColony(courses, rooms, days, timeslots, getNumAnts(), students, getNumIterations(), Khard, Ksoft, getRho, handles);
+[bestSolution bestFitness fitnesses solutions] = AntColony(courses, rooms, days, timeslots, getNumAnts(), students, getNumIterations(), Khard, Ksoft, getRho, handles);
 
 set(handles.Cur_Best_label,'String', 'Best Fitness');
 
 PrintSchedule(bestSolution);
+
+figure
+plot(fitnesses');
+
 set(handles.Ant_Start,'Enable', 'on')
 set(handles.Back_Button,'Enable', 'on')
 

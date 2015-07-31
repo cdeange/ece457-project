@@ -156,6 +156,10 @@ set(handles.Back_Button,'Enable', 'off')
 set(handles.Cur_Best_label,'String', 'Best Fitness');
 
 PrintSchedule(bestSolution);
+
+figure
+plot(fitnesses');
+
 set(handles.Genetic_Start,'Enable', 'on')
 set(handles.Back_Button,'Enable', 'on')
 
