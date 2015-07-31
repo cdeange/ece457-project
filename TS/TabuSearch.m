@@ -1,5 +1,5 @@
-function [ globalBestFitness globalBestSolution fitnesses solutions ] = TabuSearch( schedule, rooms, tabuListLength, students, maxIterations )
-    
+function [ globalBestFitness globalBestSolution fitnesses solutions ] = TabuSearch( schedule, rooms, tabuListLength, students, maxIterations, handle )
+       
     bestSolution = schedule;
     bestFitness = Inf;
     globalBestSolution = bestSolution;
@@ -24,6 +24,9 @@ function [ globalBestFitness globalBestSolution fitnesses solutions ] = TabuSear
             fprintf('iterations = %d, global best fitness = %d\n', iterations, globalBestFitness);
         end
         
+        set(handle.Cur_Iter_val,'String', int2str(iterations));
+        set(handle.Cur_Best_val,'String', int2str(globalBestFitness));
+        drawnow;
         iterations = iterations + 1;
     end
     

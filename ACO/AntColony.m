@@ -1,4 +1,4 @@
-function [ bestSolution bestFitness ] = AntColony( courses, rooms, days, timeslots, numAnts, students, iterations, Khard, Ksoft, rho )
+function [ bestSolution bestFitness ] = AntColony( courses, rooms, days, timeslots, numAnts, students, iterations, Khard, Ksoft, rho, handle )
 
     bestSolution = 0;
     bestFitness = inf;
@@ -56,6 +56,11 @@ function [ bestSolution bestFitness ] = AntColony( courses, rooms, days, timeslo
            bestSolution = bestAntSol;
            bestFitness = bestAntFitness;
         end
+        
+        set(handle.Cur_Iter_val,'String', int2str(iter));
+        set(handle.Cur_Best_val,'String', int2str(bestFitness));
+        drawnow;
+        
         iter = iter + 1;
     end
    

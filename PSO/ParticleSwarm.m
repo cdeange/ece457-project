@@ -1,4 +1,4 @@
-function [ bestSolution bestFitness ] = ParticleSwarm( numParticles, numDays, numTimeSlots, courses, rooms, students, iterations, Khard, Ksoft )
+function [ bestSolution bestFitness ] = ParticleSwarm( numParticles, numDays, numTimeSlots, courses, rooms, students, iterations, noChangeProb, randomProm, pbestProb, gbestProb, Khard, Ksoft, handle )
 
     particles = Particle.empty(numParticles,0);
     
@@ -11,8 +11,6 @@ function [ bestSolution bestFitness ] = ParticleSwarm( numParticles, numDays, nu
         fitness = GetFitness(particle, students, Khard, Ksoft, false);
         
         particles(i) =  Particle(particle, particle, fitness);
-        
-        fprintf('part%d  best: %d  global: %d\n',i, fitness,globalBestFitness);
        
         if fitness < globalBestFitness
             globalBestSol = particles(i).schedule;
@@ -29,7 +27,7 @@ function [ bestSolution bestFitness ] = ParticleSwarm( numParticles, numDays, nu
         for j = 1:numParticles
             %update particle
 %             fprintf('\npart%d\n',j);
-            particles(j) = updateParticle(particles(j), globalBestSol, globalBestFitness, rooms, numDays, numTimeSlots);
+            particles(j) = updateParticle(particles(j), globalBestSol, globalBestFitness, rooms, numDays, numTimeSlots,noChangeProb, randomProm, pbestProb, gbestProb);
             %get new personal bests
             
             fitness = GetFitness(particles(j).schedule, students, Khard, Ksoft, false);
@@ -49,8 +47,10 @@ function [ bestSolution bestFitness ] = ParticleSwarm( numParticles, numDays, nu
             globalBestSol = bestPartSol;
             globalBestFitness = bestPartFitness;
         end  
-        fprintf('iter best: %d global best: %d\n',bestPartFitness,globalBestFitness);
-        
+        fprintf('iter: %d best: %d global best: %d\n',i,bestPartFitness,globalBestFitness);
+        set(handle.Cur_Iter_val,'String', int2str(i));
+        set(handle.Cur_Best_val,'String', int2str(globalBestFitness));
+        drawnow;
         
     end
     
@@ -59,16 +59,16 @@ function [ bestSolution bestFitness ] = ParticleSwarm( numParticles, numDays, nu
 
 end
 
-function [ newParticle ] = updateParticle(particle, globalBestSol, globalBestFitness, rooms, numDays, numTimeSlots)
+function [ newParticle ] = updateParticle(particle, globalBestSol, globalBestFitness, rooms, numDays, numTimeSlots, noChangeProb, randomProm, pbestProb, gbestProb)
 %      noChange = 0.097;
 %      random = 0.03;
 %      takePbest = 0.3;
-%      takegBest = 0.6;
+%      takegBest = 0.6; 
     
-     noChange = 0.1;
-     random = 0.3;
-     takePbest = 0.35;
-     takegBest = 0.35;
+     noChange = noChangeProb;
+     random = randomProm;
+     takePbest = pbestProb;
+     takegBest = gbestProb;
 
     coursemappings = particle.schedule.courseMappings;
     
