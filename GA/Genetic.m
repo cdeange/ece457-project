@@ -1,22 +1,27 @@
-function [ bestFitness bestSolution fitnesses solutions ] = Genetic( courses, students, rooms, days, timeslots )
+function [ bestFitness bestSolution fitnesses solutions ] = Genetic( courses, students, rooms, days, timeslots, populationSize, maxGen, crossOverProb, mutationProb, handle )
 % Genetic Algorithm to find best schedule
 %
-%   courses List(Course)
-%  students List(Student)
-%     rooms List(Classroom)
-%      days Number
-% timeslots Number
+%       courses List(Course)
+%       students List(Student)
+%          rooms List(Classroom)
+%           days Number
+%      timeslots Number
+% populationSize Number
+%         maxGen Number
+%  crossOverProb Number
+%   mutationProb Number
+%         handle Object Handles
 %
-% Returns the best fitness and solutions for the inputs
+%Returns the best fitness and solutions for the inputs
 
 % Anonymous function to get the last index of a returned matrix
 last = @(A) A(end);
 
 % Initializing the parameters
-popsize = 40; % Population size
-MaxGen = 200; % Max number of generations
-pc = 0.6; % Crossover probability
-pm = 0.2; % Mutation probability
+popsize = populationSize; % Population size
+MaxGen = maxGen; % Max number of generations
+pc = crossOverProb; % Crossover probability
+pm = mutationProb; % Mutation probability
 
 % Generating the initial population/fitness
 popnew = Schedule.empty(popsize, 0);
@@ -58,6 +63,11 @@ for i = 1:MaxGen,
     % Record the current best
     fitnesses(i) = max(fitness);
     solutions(i) = last(popnew(fitnesses(i) == fitness));
+    
+    %update UI
+    set(handle.Cur_Iter_val,'String', int2str(i));
+    set(handle.Cur_Best_val,'String', int2str(fitnesses(i)));
+    drawnow;
 end
 
 % Record the global best solution ever

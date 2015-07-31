@@ -1,4 +1,4 @@
-function [ bestSolution bestFitness ] = AntColony( courses, rooms, days, timeslots, numAnts, students, iterations, Khard, Ksoft, rho )
+function [ bestSolution bestFitness fitnesses solutions ] = AntColony( courses, rooms, days, timeslots, numAnts, students, iterations, Khard, Ksoft, rho, handle )
 % AntColony Algorithm to find best schedule
 %
 %    courses List(Course)
@@ -67,6 +67,14 @@ for iter = 1:iterations,
         bestSolution = bestAntSol;
         bestFitness = bestAntFitness;
     end
+    
+    fitnesses(iter) = bestFitness; %#ok
+    solutions(iter) = bestSolution; %#ok
+    
+    fprintf ('iter: %d -- best fitness: %d\n', iter, bestFitness);
+    set(handle.Cur_Iter_val,'String', int2str(iter));
+    set(handle.Cur_Best_val,'String', int2str(bestFitness));
+    drawnow;
 end
 
 end

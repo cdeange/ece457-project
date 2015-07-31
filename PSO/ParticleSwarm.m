@@ -1,15 +1,20 @@
-function [ bestSolution bestFitness ] = ParticleSwarm( numParticles, numDays, numTimeSlots, courses, rooms, students, iterations, Khard, Ksoft )
+function [ bestSolution bestFitness fitnesses solutions ] = ParticleSwarm( numParticles, numDays, numTimeSlots, courses, rooms, students, iterations, noChangeProb, randomProb, pbestProb, gbestProb, Khard, Ksoft, handle )
 % ParticleSwarm Algorithm to find best schedule
 %
-%  numParticles Number
-%       numDays Number
-%  numTimeSlots Number
-%    courses List(Course)
-%      rooms List(Classroom)
-%   students List(Student)
-% iterations Number
-%      Khard Number
-%      Ksoft Number
+% numParticles Number
+%      numDays Number
+% numTimeSlots Number
+%      courses List(Course)
+%        rooms List(Classroom)
+%     students List(Student)
+%   iterations Number
+% noChangeProb Number
+%   randomProb Number
+%    pbestProb Number
+%    gbestProb Number
+%        Khard Number
+%        Ksoft Number
+%       handle Object Handles
 %
 % Returns the best fitness and solutions for the inputs
 
@@ -25,30 +30,32 @@ for i = 1:numParticles,
     
     particles(i) =  Particle(particle, particle, fitness);
     
-    if fitness < globalBestFitness
+    if fitness < globalBestFitness,
         globalBestSol = particles(i).schedule;
         globalBestFitness = fitness;
     end
 end
 
+
 for i = 1:iterations,
     bestPartSol = 0;
     bestPartFitness = Inf;
+    
     for j = 1:numParticles,
         % Update particle
-        particles(j) = updateParticle(particles(j), globalBestSol, rooms, numDays, numTimeSlots);
+        particles(j) = updateParticle(particles(j), globalBestSol, globalBestFitness, rooms, numDays, numTimeSlots, noChangeProb, randomProb, pbestProb, gbestProb);
         
         % Get new personal bests
         fitness = GetFitness(particles(j).schedule, students, Khard, Ksoft, false);
         
         % Update personal best if improved
-        if fitness < particles(j).personalBestFitness,
+        if fitness < particles(j).personalBestFitness
             particles(j).personalBestSol = particles(j).schedule;
             particles(j).personalBestFitness = fitness;
         end
         
         % Update best part if improved
-        if fitness < bestPartFitness,
+        if fitness < bestPartFitness
             bestPartSol = particles(j).schedule;
             bestPartFitness = fitness;
         end
@@ -60,6 +67,14 @@ for i = 1:iterations,
         globalBestFitness = bestPartFitness;
     end
     
+    fitnesses(i) = globalBestFitness; %#ok
+    solutions(i) = globalBestSol; %#ok
+    
+    fprintf('iter: %d best: %d global best: %d\n', i, bestPartFitness, globalBestFitness);
+    set(handle.Cur_Iter_val,'String', int2str(i));
+    set(handle.Cur_Best_val,'String', int2str(globalBestFitness));
+    drawnow;
+    
 end
 
 bestSolution = globalBestSol;
@@ -67,13 +82,12 @@ bestFitness = globalBestFitness;
 
 end
 
+function [ newParticle ] = updateParticle(particle, globalBestSol, globalBestFitness, rooms, numDays, numTimeSlots, noChangeProb, randomProm, pbestProb, gbestProb)
 
-function [ newParticle ] = updateParticle(particle, globalBestSol, rooms, numDays, numTimeSlots)
-
-noChange  = 0.1;
-random    = 0.2  + noChange;
-takePbest = 0.35 + random;
-takegBest = 0.35 + takePbest; %#ok unused since this is the 'else' case
+noChange = noChangeProb;
+random = randomProm + noChangeProb;
+takePbest = pbestProb + random;
+takeGbest = gbestProb + takePbest; %#ok unused since this is the 'else' case
 
 coursemappings = particle.schedule.courseMappings;
 
@@ -83,9 +97,9 @@ for i = 1:length(coursemappings),
     randOp = rand;
     
     if randOp <= noChange,
-        % No day change
-    elseif randOp <= random,
-        randDay = randi([1, numDays], 1);
+        % No change
+    elseif randOp < random,
+        randDay = round(numDays * rand + 0.5);
         coursemappings(i).day = randDay;
     elseif randOp <= takePbest,
         coursemappings(i).day = particle.personalBestSol.courseMappings(i).day;
@@ -98,9 +112,9 @@ for i = 1:length(coursemappings),
     maxTimeslot = numTimeSlots - coursemappings(i).course.duration + 1;
     
     if randOp <= noChange,
-        % No timeslot change
+        % No change
     elseif randOp <= random,
-        randTimeSlot = randi([1, maxTimeslot], 1);
+        randTimeSlot = round(maxTimeslot * rand + 0.5);
         coursemappings(i).timeSlot = randTimeSlot;
     elseif randOp <= takePbest,
         coursemappings(i).timeSlot = particle.personalBestSol.courseMappings(i).timeSlot;
@@ -112,7 +126,7 @@ for i = 1:length(coursemappings),
     randOp = rand;
     
     if randOp <= noChange,
-        % No room change
+        % No change
     elseif randOp <= random,
         randRoom = randsample(rooms, 1);
         coursemappings(i).room = randRoom;
@@ -121,10 +135,10 @@ for i = 1:length(coursemappings),
     else
         coursemappings(i).room = globalBestSol.courseMappings(i).room;
     end
-    
 end
 
-newSchedule = Schedule(coursemappings, numDays, numTimeSlots);
-newParticle = Particle(newSchedule, particle.personalBestSol, particle.personalBestFitness);
+sched = Schedule(coursemappings, numDays, numTimeSlots);
 
+newParticle = Particle(sched, particle.personalBestSol, particle.personalBestFitness);
 end
+

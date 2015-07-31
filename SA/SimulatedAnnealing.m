@@ -1,22 +1,28 @@
-function [ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing( schedule, rooms, students )
+function [ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing( schedule, rooms, students, maxRej, maxRun, maxAccepts, inAlpha, handle )
 % SimulatedAnnealing Algorithm to find best schedule
 % (Adapted from X-S Yang, Cambridge University)
 %
-% schedule Schedule
-%    rooms List(Classroom)
-% students List(Student)
-%
+%   schedule Schedule
+%      rooms List(Classroom)
+%   students List(Student)
+%     maxRej Number
+%     maxRun Number
+% maxAccepts Number
+%    inAlpha Number
+%     handle Object Handles
 % Returns the best fitness and solutions for the inputs
 
 % Initializing parameters and settings
-T_min = 1;        % Final stopping temperature
-F_min = 0;        % Min value of the function
-max_rej = 1000;   % Maximum number of rejections
-max_run = 250;    % Maximum number of runs
-max_accept = 15;  % Maximum number of accept
-k = 1;            % Boltzmann constant
-alpha = 0.9;      % Cooling factor
-guess = schedule; % Initial guess
+T_min = 1;                  % Final stopping temperature
+F_min = 0;                  % Min value of the function
+max_rej = maxRej;           % Maximum number of rejections
+max_run = maxRun;           % Maximum number of runs
+max_accept = maxAccepts;        % Maximum number of accept
+k = 1;                      % Boltzmann constant
+alpha = inAlpha;            % Cooling factor
+guess = schedule;% Initial guess
+
+
 
 % Initializing the counters i,j etc
 i = 0;
@@ -72,6 +78,11 @@ while (T > T_min) && (j <= max_rej) && (E_new > F_min),
     
     solutions(iter) = guess; %#ok
     fitnesses(iter) = E_old; %#ok
+    
+    set(handle.Cur_Iter_val,'String', int2str(iter));
+    set(handle.Cur_Temp_val,'String', num2str(T));
+    set(handle.Cur_Best_val,'String', int2str(min(fitnesses)));
+    drawnow;
     
     iter = iter + 1;
 end

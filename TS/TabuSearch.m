@@ -1,4 +1,4 @@
-function [ globalBestFitness globalBestSolution fitnesses solutions ] = TabuSearch( schedule, rooms, tabuListLength, students, maxIterations )
+function [ globalBestFitness globalBestSolution fitnesses solutions ] = TabuSearch( schedule, rooms, tabuListLength, students, maxIterations, handle )
 % TabuSearch Algorithm to find best schedule
 %
 %       schedule Schedule
@@ -6,6 +6,7 @@ function [ globalBestFitness globalBestSolution fitnesses solutions ] = TabuSear
 % tabuListLength Number
 %       students List(Student)
 %  maxIterations Number
+%         handle Object Handles
 %
 % Returns the best fitness and solutions for the inputs
 
@@ -23,6 +24,7 @@ for iterations = 1:maxIterations,
     % Find best neighbour of current schedule and move to it
     % Aspiration allows a solution better than global best to be taken,
     % even if the solution is currently tabu'ed
+    
     [ bestSolution bestFitness tabuList ] = ...
         getBestNeighbourForSchedule( bestSolution, globalBestFitness, rooms, tabuList, tabuListLength, students );
     
@@ -34,7 +36,10 @@ for iterations = 1:maxIterations,
         globalBestFitness = bestFitness;
         globalBestSolution = bestSolution;
     end
-    
+    fprintf('iterations = %d, global best fitness = %d\n', iterations, globalBestFitness);
+    set(handle.Cur_Iter_val,'String', int2str(iterations));
+    set(handle.Cur_Best_val,'String', int2str(globalBestFitness));
+    drawnow;
 end
 
 end
