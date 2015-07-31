@@ -1,6 +1,6 @@
 rng(0);
 
-USE_FEASIBLE = true;
+USE_FEASIBLE = false;
 
 if USE_FEASIBLE,
     [courses students rooms teachers days timeslots] = ReadInput('feasible.csv');
@@ -19,11 +19,13 @@ end
 
 [ schedule ] = GenerateInitialSolution(days, timeslots, courses, rooms);
 
+
 PrintSchedule(schedule);
 PrintCoursesRooms (schedule, students);
 PrintCourseMappings(students, length(courses), false);
 
 addpath(strcat(pwd, '/constraints'));
+addpath(strcat(pwd, '/GUI'));
 
 addpath(strcat(pwd, '/TS'));
 addpath(strcat(pwd, '/SA'));
@@ -36,4 +38,4 @@ addpath(strcat(pwd, '/BA'));
 % [ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing(schedule, rooms, students)
 % [ bestFitness bestSolution fitnesses solutions ] = Genetic(courses, students, rooms, days, timeslots);
 
-[ bestFitness bestSolution ] = BatAlgorithm(days, timeslots, courses, rooms, students)
+[ bestFitness bestSolution fitnesses solutions ] = BatAlgorithm(days, timeslots, courses, rooms, students)
