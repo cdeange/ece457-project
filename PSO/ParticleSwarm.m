@@ -1,4 +1,5 @@
-function [ bestSolution bestFitness fitnesses solutions ] = ParticleSwarm( numParticles, numDays, numTimeSlots, courses, rooms, students, iterations, noChangeProb, randomProb, pbestProb, gbestProb, Khard, Ksoft, handle )
+function [ bestSolution bestFitness fitnesses solutions ] = ParticleSwarm( numParticles, numDays, numTimeSlots, ...
+        courses, rooms, students, iterations, noChangeProb, randomProb, pbestProb, gbestProb, handle )
 % ParticleSwarm Algorithm to find best schedule
 %
 % numParticles Number
@@ -12,8 +13,6 @@ function [ bestSolution bestFitness fitnesses solutions ] = ParticleSwarm( numPa
 %   randomProb Number
 %    pbestProb Number
 %    gbestProb Number
-%        Khard Number
-%        Ksoft Number
 %       handle Object Handles
 %
 % Returns the best fitness and solutions for the inputs
@@ -26,7 +25,7 @@ globalBestFitness = Inf;
 % Initialize particles
 for i = 1:numParticles,
     particle = GenerateInitialSolution(numDays, numTimeSlots, courses, rooms);
-    fitness = GetFitness(particle, students, Khard, Ksoft, false);
+    fitness = GetFitness(particle, students);
     
     particles(i) =  Particle(particle, particle, fitness);
     
@@ -46,7 +45,7 @@ for i = 1:iterations,
         particles(j) = updateParticle(particles(j), globalBestSol, globalBestFitness, rooms, numDays, numTimeSlots, noChangeProb, randomProb, pbestProb, gbestProb);
         
         % Get new personal bests
-        fitness = GetFitness(particles(j).schedule, students, Khard, Ksoft, false);
+        fitness = GetFitness(particles(j).schedule, students);
         
         % Update personal best if improved
         if fitness < particles(j).personalBestFitness

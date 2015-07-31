@@ -159,13 +159,9 @@ teachers = getappdata(0,'teachers');
 days = getappdata(0,'days');
 timeslots = getappdata(0,'timeslots');
 
-%TODO: get KHARD
-Khard = 1000000;
-Ksoft = 1;
-    
 set(handles.Particle_Start,'Enable', 'off')
 set(handles.Back_Button,'Enable', 'off')
-[ bestSolution bestFitness fitnesses solutions ] = ParticleSwarm(getNumParticles(), days, timeslots, courses, rooms, students, getNumIterations(), getNoChangeProb(), getRandomProb(), getPbestProb(), getGbestProb(), Khard, Ksoft, handles);
+[ bestSolution bestFitness fitnesses solutions ] = ParticleSwarm(getNumParticles(), days, timeslots, courses, rooms, students, getNumIterations(), getNoChangeProb(), getRandomProb(), getPbestProb(), getGbestProb(), handles);
 set(handles.Cur_Best_label,'String', 'Best Fitness');
 
 PrintSchedule(bestSolution);

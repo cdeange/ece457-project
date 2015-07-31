@@ -1,4 +1,5 @@
-function [ bestSolution bestFitness fitnesses solutions ] = AntColony( courses, rooms, days, timeslots, numAnts, students, iterations, Khard, Ksoft, rho, handle )
+function [ bestSolution bestFitness fitnesses solutions ] = AntColony( courses, rooms, days, timeslots, ...
+    numAnts, students, iterations, rho, handle )
 % AntColony Algorithm to find best schedule
 %
 %    courses List(Course)
@@ -8,15 +9,13 @@ function [ bestSolution bestFitness fitnesses solutions ] = AntColony( courses, 
 %    numAnts Number
 %   students List(Student)
 % iterations Number
-%      Khard Number
-%      Ksoft Number
 %        rho Number
 %
 % Returns the best fitness and solutions for the inputs
 
 bestSolution = 0;
 bestFitness = Inf;
-Q = Khard;
+Q = GetKHard(length(courses), days, length(students));
 
 acoNodes = ACONode.empty(length(courses), 0);
 ants = Schedule.empty(numAnts, 0);
@@ -51,7 +50,7 @@ for iter = 1:iterations,
     bestAntSol = 0;
     bestAntPath = 0;
     for i = 1:numAnts,
-        fitness = GetFitness(ants(i), students, Khard, Ksoft, false);
+        fitness = GetFitness(ants(i), students);
         if fitness < bestAntFitness,
             bestAntFitness = fitness;
             bestAntSol = ants(i);

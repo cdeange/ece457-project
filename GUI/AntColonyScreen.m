@@ -148,11 +148,7 @@ timeslots = getappdata(0,'timeslots');
 set(handles.Ant_Start,'Enable', 'off')
 set(handles.Back_Button,'Enable', 'off')
 
-%TODO = Khard
-Khard = 1000;
-Ksoft = 1;
-
-[bestSolution bestFitness fitnesses solutions] = AntColony(courses, rooms, days, timeslots, getNumAnts(), students, getNumIterations(), Khard, Ksoft, getRho, handles);
+[bestSolution bestFitness fitnesses solutions] = AntColony(courses, rooms, days, timeslots, getNumAnts(), students, getNumIterations(), getRho, handles);
 
 set(handles.Cur_Best_label,'String', 'Best Fitness');
 
