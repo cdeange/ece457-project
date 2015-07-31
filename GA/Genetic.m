@@ -1,10 +1,21 @@
 function [ bestFitness bestSolution fitnesses solutions ] = Genetic( courses, students, rooms, days, timeslots, populationSize, maxGen, crossOverProb, mutationProb, handle )
+% Genetic Algorithm to find best schedule
+%
+%       courses List(Course)
+%       students List(Student)
+%          rooms List(Classroom)
+%           days Number
+%      timeslots Number
+% populationSize Number
+%         maxGen Number
+%  crossOverProb Number
+%   mutationProb Number
+%         handle Object Handles
+%
+%Returns the best fitness and solutions for the inputs
 
-global last;
-
-% An anonymous function to get the last index of a matrix
+% Anonymous function to get the last index of a matrix
 last = @(A) A(end);
-
 
 % Initializing the parameters
 popsize = populationSize; % Population size
@@ -46,12 +57,11 @@ for i = 1:MaxGen,
             popnew(kk) = Mutate(pop(kk), pm, rooms);
             [ fitness, popnew ] = evolve(kk, pop, popnew, fitness, fitold, students);
         end
-    
+        
     end
     
     % Record the current best
     fitnesses(i) = max(fitness);
-%     fitnesses(i)
     solutions(i) = last(popnew(fitnesses(i) == fitness));
     
     %update UI

@@ -1,18 +1,24 @@
 function [ newSchedule ] = GetRandomNeighbour( schedule, rooms )
+% GetRandomNeighbour Returns a random neighbour of a schedule solution.
+%
+% schedule Schedule
+%    rooms List(Classroom)
+%
+% Returns a new, slightly-changed Schedule
 
 days = schedule.days;
 timeslots = schedule.timeslots;
 
 randOperation = rand;
 
-if randOperation < 0.33,
+if randOperation < 1/3,
     % Change day and/or timeslot
-
     randMapping = randsample(schedule.courseMappings, 1);
     randCourse = randMapping.course;
     day = randMapping.day;
     timeslot = randMapping.timeSlot;
     
+    % Make sure at least one of <room, day> is different from before
     while day == randMapping.day && timeslot == randMapping.timeSlot,
         day = randi([1, days], 1);
         validTimeSlots = timeslots - randCourse.duration + 1;
@@ -23,8 +29,8 @@ if randOperation < 0.33,
     newMappings = schedule.courseMappings;
     newMappings(randCourse.courseID) = newMapping;
     newSchedule = Schedule(newMappings, days, timeslots);
-
-elseif randOperation < 0.66,
+    
+elseif randOperation < 2/3,
     % Change room
     randMapping = randsample(schedule.courseMappings, 1);
     randCourse = randMapping.course;
@@ -38,7 +44,7 @@ elseif randOperation < 0.66,
     newMappings = schedule.courseMappings;
     newMappings(randCourse.courseID) = newMapping;
     newSchedule = Schedule(newMappings, days, timeslots);
-
+    
 else
     % Swap two courses
     i = 1;
@@ -51,7 +57,7 @@ else
         if swapCourse.courseID ~= randCourse.courseID,
             newEndSlot1 = randMapping.timeSlot + swapMapping.course.duration;
             newEndSlot2 = swapMapping.timeSlot + randMapping.course.duration;
-
+            
             if newEndSlot1 <= schedule.timeslots && newEndSlot2 <= schedule.timeslots,
                 % Found two different courses that can be safely swapped
                 break
@@ -60,7 +66,7 @@ else
         
         i = i + 1;
         if i >= 5000
-            % It is unlikely any two courses can be swapped
+            % It is unlikely any two courses can be swapped :(
             newSchedule = schedule;
             return
         end
@@ -73,6 +79,6 @@ else
     newMappings(swapCourse.courseID) = newMapping2;
     newSchedule = Schedule(newMappings, days, timeslots);
     
-end % if
+end
 
 end

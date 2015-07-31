@@ -1,4 +1,11 @@
 function [ c1 c2 ] = Crossover( p1, p2, rooms )
+% Crossover Crosses over two parent schedules
+%
+%    p1 Schedule
+%    p2 Schedule
+% rooms List(Classroom)
+%
+% Returns the two children created from the crossover
 
 courseCount = length(p1.courseMappings);
 crossover_max = courseCount * 3;

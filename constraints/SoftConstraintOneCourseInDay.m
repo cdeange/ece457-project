@@ -1,4 +1,11 @@
 function [ oneCourseCount ] = SoftConstraintOneCourseInDay( schedule, students )
+% SoftConstraintOneCourseInDay Determines the number of students who have
+% only one class on any given day
+%
+% schedule Schedule
+% students List(Student)
+%
+% Returns the number of times this constraint is not met
 
 courseCount = zeros(length(students), schedule.days);
 

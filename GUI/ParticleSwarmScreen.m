@@ -234,8 +234,8 @@ function NoChange_Prob_val_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of NoChange_Prob_val as text
 %        str2double(get(hObject,'String')) returns contents of NoChange_Prob_val as a double
-global noChangePronc;
-noChangePronc = str2double(get(hObject,'String'));
+global noChangeProb;
+noChangeProb = str2double(get(hObject,'String'));
 
 % --- Executes during object creation, after setting all properties.
 function NoChange_Prob_val_CreateFcn(hObject, eventdata, handles)
@@ -248,8 +248,8 @@ function NoChange_Prob_val_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-global noChangePronc;
-noChangePronc = str2double(get(hObject,'String'));
+global noChangeProb;
+noChangeProb = str2double(get(hObject,'String'));
 
 
 function Pbest_Prob_val_Callback(hObject, eventdata, handles)

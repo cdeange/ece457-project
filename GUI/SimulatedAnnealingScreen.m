@@ -134,7 +134,7 @@ timeslots = getappdata(0,'timeslots');
 set(handles.SimulatedAnnealing_Start,'Enable', 'off')
 set(handles.Back_Button,'Enable', 'off')
 [ schedule ] = GenerateInitialSolution(days, timeslots, courses, rooms);
-%[ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing(schedule, rooms, students, getMaxRejections(), getMaxRuns(), getMaxAccepts(), getAlpha(),handles);
+[ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing(schedule, rooms, students, getMaxRejections(), getMaxRuns(), getMaxAccepts(), getAlpha(), handles);
 set(handles.Cur_Best_label,'String', 'Best Fitness');
 
 PrintSchedule(bestSolution);

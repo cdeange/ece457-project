@@ -1,4 +1,9 @@
 classdef Particle
+    % Particle A particle using in PSO
+    %
+    %            schedule Schedule
+    %     personalBestSol Schedule
+    % personalBestFitness Number
     
     properties
         schedule

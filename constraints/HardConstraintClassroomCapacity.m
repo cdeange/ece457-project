@@ -1,28 +1,26 @@
 function [ numOverbookedRooms ] = HardConstraintClassroomCapacity( schedule, students )
+% HardConstraintClassroomCapacity Determines overbooked classrooms
+%
+% schedule Schedule
+% students List(Student)
+%
+% Returns the number of times this constraint is not met
 
 numOverbookedRooms = 0;
-coursemappings = [schedule.courseMappings];
-courseEnrollments = zeros(length(coursemappings),1);
+courseEnrollments = zeros(length(schedule.courseMappings), 1);
 
-for i=1:length(students)
-   stud = students(i);
-   coursesTaken = stud.enrolledCourses;
-
-   for j=1:length(coursesTaken)
-      courseEnrollments(coursesTaken(j).courseID) = courseEnrollments(coursesTaken(j).courseID) + 1;
-   end
+for student = students,
+    for course = student.enrolledCourses,
+        courseEnrollments(course.courseID) = courseEnrollments(course.courseID) + 1;
+    end
 end
 
-for i = 1:length(coursemappings)
-    room = coursemappings(i).room;
-    roomCapacity = room.capacity;
-
-    course = coursemappings(i).course;
-    courseID = course.courseID;
-
-    courseEnrollment = courseEnrollments(courseID);
-
-    if courseEnrollment > roomCapacity
+for mapping = schedule.courseMappings,
+    roomCapacity = mapping.room.capacity;
+    courseEnrollment = courseEnrollments(mapping.course.courseID);
+    
+    if courseEnrollment > roomCapacity,
+        % Too many students for this room
         numOverbookedRooms = numOverbookedRooms + 1;
     end
 end

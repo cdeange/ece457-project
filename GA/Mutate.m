@@ -1,4 +1,11 @@
 function [ child ] = Mutate( parent, pm, rooms )
+% Mutate Mutates a parent schedule
+%
+% parent Schedule
+%     pm Number
+%  rooms List(Classroom)
+%
+% Returns the child created from the mutation
 
 courseCount = length(parent.courseMappings);
 newMappings = CourseMapping.empty(courseCount, 0);
