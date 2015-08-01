@@ -64,7 +64,7 @@ for i = 1:MaxGen,
     fitnesses(i) = max(fitness);
     solutions(i) = last(popnew(fitnesses(i) == fitness));
     
-    %update UI
+    % update the UI with the global best fitness after this iteration 
     set(handle.Cur_Iter_val,'String', int2str(i));
     set(handle.Cur_Best_val,'String', int2str(fitnesses(i)));
     drawnow;

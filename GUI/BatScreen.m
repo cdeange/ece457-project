@@ -1,35 +1,35 @@
-function varargout = TabuSearchScreen(varargin)
-% TABUSEARCHSCREEN MATLAB code for TabuSearchScreen.fig
-%      TABUSEARCHSCREEN, by itself, creates a new TABUSEARCHSCREEN or raises the existing
+function varargout = BatScreen(varargin)
+% BATSCREEN MATLAB code for BatScreen.fig
+%      BATSCREEN, by itself, creates a new BATSCREEN or raises the existing
 %      singleton*.
 %
-%      H = TABUSEARCHSCREEN returns the handle to a new TABUSEARCHSCREEN or the handle to
+%      H = BATSCREEN returns the handle to a new BATSCREEN or the handle to
 %      the existing singleton*.
 %
-%      TABUSEARCHSCREEN('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in TABUSEARCHSCREEN.M with the given input arguments.
+%      BATSCREEN('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in BATSCREEN.M with the given input arguments.
 %
-%      TABUSEARCHSCREEN('Property','Value',...) creates a new TABUSEARCHSCREEN or raises the
+%      BATSCREEN('Property','Value',...) creates a new BATSCREEN or raises the
 %      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before TabuSearchScreen_OpeningFcn gets called.  An
+%      applied to the GUI before BatScreen_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to TabuSearchScreen_OpeningFcn via varargin.
+%      stop.  All inputs are passed to BatScreen_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
-% Edit the above text to modify the response to help TabuSearchScreen
+% Edit the above text to modify the response to help BatScreen
 
-% Last Modified by GUIDE v2.5 30-Jul-2015 12:15:35
+% Last Modified by GUIDE v2.5 31-Jul-2015 19:59:31
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @TabuSearchScreen_OpeningFcn, ...
-                   'gui_OutputFcn',  @TabuSearchScreen_OutputFcn, ...
+                   'gui_OpeningFcn', @BatScreen_OpeningFcn, ...
+                   'gui_OutputFcn',  @BatScreen_OutputFcn, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -44,15 +44,15 @@ end
 % End initialization code - DO NOT EDIT
 
 
-% --- Executes just before TabuSearchScreen is made visible.
-function TabuSearchScreen_OpeningFcn(hObject, eventdata, handles, varargin)
+% --- Executes just before BatScreen is made visible.
+function BatScreen_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to TabuSearchScreen (see VARARGIN)
+% varargin   command line arguments to BatScreen (see VARARGIN)
 
-% Choose default command line output for TabuSearchScreen
+% Choose default command line output for BatScreen
 handles.output = hObject;
 
 % Update handles structure
@@ -67,18 +67,18 @@ if (isappdata(0,'fileName') == 1 && ...
     isappdata(0,'teachers') == 1 && ...
     isappdata(0,'days') == 1 && ...
     isappdata(0,'timeslots') == 1)
-  
+    
     set(handles.FileName_Text,'String', getappdata(0,'fileName'));
-    set(handles.Tabu_Start,'Enable', 'on')
+    set(handles.BAT_Start,'Enable', 'on')
     
 end
 
-% UIWAIT makes TabuSearchScreen wait for user response (see UIRESUME)
+% UIWAIT makes BatScreen wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = TabuSearchScreen_OutputFcn(hObject, eventdata, handles) 
+function varargout = BatScreen_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -88,15 +88,25 @@ function varargout = TabuSearchScreen_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 % GLOBAL VARIABLES
-% tabu list length
-function r = getTabuListLength
-    global tabuListLength
-    r = tabuListLength;
+% population size
+function r = getPopSize
+    global popSize
+    r = popSize;
     
 % number of iterations
 function r = getNumIterations
     global numIterations
     r = numIterations;
+    
+% loudness
+function r = getLoudness
+    global loudness
+    r = loudness;
+    
+% pulse rate
+function r = getPulseRate
+    global pulseRate
+    r = pulseRate;
 
 % Used to load an input file into the program
 function Load_File_Callback(hObject, eventdata, handles)
@@ -125,9 +135,9 @@ if ~isequal(filename,0)
    
     % allow the user to run the program if there was no error reading in
     % the file
-    set(handles.Tabu_Start,'Enable', 'on')
+    set(handles.BAT_Start,'Enable', 'on')
 end
-    
+
 
 % Take the user back to the main screen
 function Back_Button_Callback(hObject, eventdata, handles)
@@ -138,11 +148,12 @@ function Back_Button_Callback(hObject, eventdata, handles)
 % create a handle/open the main screen, and close the current screen
 WS_handle = WelcomeScreen;      % open main screen
 delete(get(hObject, 'parent')); % close this screen
- 
 
-% Executes the tabu search with the given input parameters
-function Tabu_Start_Callback(hObject, eventdata, handles)
-% hObject    handle to Tabu_Start (see GCBO)
+
+
+% Executes the bat algorithm with the given input parameters
+function BAT_Start_Callback(hObject, eventdata, handles)
+% hObject    handle to BAT_Start (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
@@ -155,12 +166,11 @@ days = getappdata(0,'days');
 timeslots = getappdata(0,'timeslots');
     
 % disable buttons while the algorithm is running
-set(handles.Tabu_Start,'Enable', 'off')
+set(handles.BAT_Start,'Enable', 'off')
 set(handles.Back_Button,'Enable', 'off')
 
-% generate intial solution and the the algorithm
-[ schedule ] = GenerateInitialSolution(days, timeslots, courses, rooms);
-[ bestFitness bestSolution fitnesses solutions ] = TabuSearch(schedule, rooms, getTabuListLength(), students, getNumIterations(), handles);
+% run the algorithm
+[ bestFitness bestSolution fitnesses solutions ] = BatAlgorithm(days, timeslots, courses, rooms, students, getPopSize(), getNumIterations(), getLoudness(), getPulseRate(), handles);
 
 % change the label to best fitness when the algorithm is complete
 set(handles.Cur_Best_label,'String', 'Best Fitness');
@@ -173,46 +183,43 @@ figure
 plot(fitnesses');
 
 % reenable the buttons
-set(handles.Tabu_Start,'Enable', 'on')
+set(handles.BAT_Start,'Enable', 'on')
 set(handles.Back_Button,'Enable', 'on')
 
 
-% updates the global tabu list length
-function Tabu_ListLength_Callback(hObject, eventdata, handles)
-% hObject    handle to Tabu_ListLength (see GCBO)
+% updates the global population size
+function PopSize_val_Callback(hObject, eventdata, handles)
+% hObject    handle to PopSize_val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-global tabuListLength;
-tabuListLength = str2double(get(hObject,'String'));
+global popSize;
+popSize = str2double(get(hObject,'String'));
 
-
-% initialize the global tabu list length
-function Tabu_ListLength_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to Tabu_ListLength (see GCBO)
+% initialize the global population size
+function PopSize_val_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to PopSize_val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-global tabuListLength;
-tabuListLength = str2double(get(hObject,'String'));
+global popSize;
+popSize = str2double(get(hObject,'String'));
 
-
-% updates the global number of iteration
-function Tabu_Iterations_Callback(hObject, eventdata, handles)
-% hObject    handle to Tabu_Iterations (see GCBO)
+% updates the global number of iterations
+function Num_Iter_val_Callback(hObject, eventdata, handles)
+% hObject    handle to Num_Iter_val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
 global numIterations;
 numIterations = str2double(get(hObject,'String'));
-
 
 % initialize the global number of iterations
-function Tabu_Iterations_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to Tabu_Iterations (see GCBO)
+function Num_Iter_val_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to Num_Iter_val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -221,3 +228,47 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 global numIterations;
 numIterations = str2double(get(hObject,'String'));
+
+
+% updates the global loudness
+function Loudness_val_Callback(hObject, eventdata, handles)
+% hObject    handle to Loudness_val (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+global loudness;
+loudness = str2double(get(hObject,'String'));
+
+% initialize the global loudness
+function Loudness_val_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to Loudness_val (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+global loudness;
+loudness = str2double(get(hObject,'String'));
+
+
+% updates the global pulse rate
+function Pulse_Rate_val_Callback(hObject, eventdata, handles)
+% hObject    handle to Pulse_Rate_val (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+global pulseRate;
+pulseRate = str2double(get(hObject,'String'));
+
+% initialize the global pulse rate
+function Pulse_Rate_val_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to Pulse_Rate_val (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+global pulseRate;
+pulseRate = str2double(get(hObject,'String'));

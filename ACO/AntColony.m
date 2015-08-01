@@ -70,6 +70,7 @@ for iter = 1:iterations,
     fitnesses(iter) = bestFitness; %#ok
     solutions(iter) = bestSolution; %#ok
     
+    % print the global best fitness after this iteration and update the UI
     fprintf ('iter: %d -- best fitness: %d\n', iter, bestFitness);
     set(handle.Cur_Iter_val,'String', int2str(iter));
     set(handle.Cur_Best_val,'String', int2str(bestFitness));

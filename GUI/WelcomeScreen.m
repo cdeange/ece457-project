@@ -22,7 +22,7 @@ function varargout = WelcomeScreen(varargin)
 
 % Edit the above text to modify the response to help WelcomeScreen
 
-% Last Modified by GUIDE v2.5 30-Jul-2015 14:59:17
+% Last Modified by GUIDE v2.5 31-Jul-2015 20:17:16
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -58,7 +58,15 @@ handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
 
-if isappdata(0,'fileName') == 1
+% If there is currently a schedule loaded, show that it is loaded
+if (isappdata(0,'fileName') == 1 && ...
+    isappdata(0,'courses') == 1 && ...
+    isappdata(0,'students') == 1 && ...
+    isappdata(0,'rooms') == 1 && ...
+    isappdata(0,'teachers') == 1 && ...
+    isappdata(0,'days') == 1 && ...
+    isappdata(0,'timeslots') == 1)
+
     set(handles.FileName_Text,'String', getappdata(0,'fileName'));
 end
 
@@ -77,13 +85,19 @@ function varargout = WelcomeScreen_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 
-% --- Executes on button press in Load_File.
+% Used to load an input file into the program
 function Load_File_Callback(hObject, eventdata, handles)
 % hObject    handle to Load_File (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+% show a browser with CSV files as the type
 [filename, pathname] = uigetfile({'*.csv','csv files'});
+
+% if the user did not click cancel
 if ~isequal(filename,0)
+    
+    % set the file name and read in the file
     set(handles.FileName_Text,'String', fullfile(pathname, filename))
     [courses students rooms teachers days timeslots] = ReadInput(fullfile(pathname, filename)); 
    
@@ -97,47 +111,55 @@ if ~isequal(filename,0)
     setappdata(0,'fileName',fullfile(pathname, filename));
 end
 
-% --- Executes on button press in Tabu_Search.
+% go to the tabu search screen
 function Tabu_Search_Callback(hObject, eventdata, handles)
 % hObject    handle to Tabu_Search (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-TS_handle = TabuSearchScreen; %open tabu search
+TS_handle = TabuSearchScreen;   % open tabu search
 delete(get(hObject, 'parent')); % close this screen
 
 
-% --- Executes on button press in Particle_Swarm.
+% go to the particle swarm screen
 function Particle_Swarm_Callback(hObject, eventdata, handles)
 % hObject    handle to Particle_Swarm (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-PSO_handle = ParticleSwarmScreen; %open tabu search
-delete(get(hObject, 'parent')); % close this screen
+PSO_handle = ParticleSwarmScreen;   % open particle swarm
+delete(get(hObject, 'parent'));     % close this screen
 
 
-% --- Executes on button press in Simulated_Annealing.
+% go to the simulated annealing screen
 function Simulated_Annealing_Callback(hObject, eventdata, handles)
 % hObject    handle to Simulated_Annealing (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-SA_handle = SimulatedAnnealingScreen; %open tabu search
-delete(get(hObject, 'parent')); % close this screen
+SA_handle = SimulatedAnnealingScreen;   % open simulated annealing
+delete(get(hObject, 'parent'));         % close this screen
 
 
-% --- Executes on button press in Genetic_Algorithm.
+% go to the genetic algorithm screen
 function Genetic_Algorithm_Callback(hObject, eventdata, handles)
 % hObject    handle to Genetic_Algorithm (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-GA_handle = GeneticScreen; %open tabu search
+GA_handle = GeneticScreen;      % open genetic algorithm
 delete(get(hObject, 'parent')); % close this screen
 
 
-% --- Executes on button press in Ant_Colony.
+% go to the ant colony screen
 function Ant_Colony_Callback(hObject, eventdata, handles)
 % hObject    handle to Ant_Colony (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-ACO_handle = AntColonyScreen; %open tabu search
+ACO_handle = AntColonyScreen;   % open ant colony
 delete(get(hObject, 'parent')); % close this screen
 
+
+% go the the bat screen
+function Bat_Algorithm_Callback(hObject, eventdata, handles)
+% hObject    handle to Bat_Algorithm (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+BAT_handle = BatScreen;         % open bat
+delete(get(hObject, 'parent')); % close this screen
