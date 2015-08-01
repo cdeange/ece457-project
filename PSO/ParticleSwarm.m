@@ -17,6 +17,12 @@ function [ bestSolution bestFitness fitnesses solutions ] = ParticleSwarm( numPa
 %
 % Returns the best fitness and solutions for the inputs
 
+fprintf('--------------\n');
+fprintf('Particle Swarm\n');
+tic;
+feas = false;
+Khard = GetKHard(length(courses), numDays, length(students));
+
 particles = Particle.empty(numParticles, 0);
 
 globalBestSol = 0;
@@ -34,7 +40,6 @@ for i = 1:numParticles,
         globalBestFitness = fitness;
     end
 end
-
 
 for i = 1:iterations,
     bestPartSol = 0;
@@ -66,14 +71,19 @@ for i = 1:iterations,
         globalBestFitness = bestPartFitness;
     end
     
-    fitnesses(i) = globalBestFitness; %#ok
-    solutions(i) = globalBestSol; %#ok
+    fitnesses(i) = bestPartFitness; %#ok
+    solutions(i) = bestPartSol; %#ok
     
     % print the global best fitness after this iteration and update the UI
-    fprintf('iter: %d best: %d global best: %d\n', i, bestPartFitness, globalBestFitness);
     set(handle.Cur_Iter_val,'String', int2str(i));
     set(handle.Cur_Best_val,'String', int2str(globalBestFitness));
     drawnow;
+    
+    if ~feas && bestPartFitness < Khard,
+        feas = true;
+        t = toc;
+        fprintf('Feasible solution:\t%.4f seconds\n', t);
+    end
     
     if fitnesses(i) == 0,
         break;
@@ -83,7 +93,12 @@ end
 bestSolution = globalBestSol;
 bestFitness = globalBestFitness;
 
+t = toc;
+fprintf('Done execution:\t%.4f seconds\n', t);
+fprintf('Best Fitness:\t%d\n', bestFitness);
+
 end
+
 
 function [ newParticle ] = updateParticle(particle, globalBestSol, globalBestFitness, rooms, numDays, numTimeSlots, noChangeProb, randomProm, pbestProb, gbestProb)
 

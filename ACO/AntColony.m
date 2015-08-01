@@ -13,6 +13,12 @@ function [ bestSolution bestFitness fitnesses solutions ] = AntColony( courses, 
 %
 % Returns the best fitness and solutions for the inputs
 
+fprintf('----------\n');
+fprintf('Ant Colony\n');
+tic;
+feas = false;
+Khard = GetKHard(length(courses), days, length(students));
+
 bestSolution = 0;
 bestFitness = Inf;
 Q = GetKHard(length(courses), days, length(students));
@@ -33,7 +39,6 @@ for i = 1:length(acoNodes)
         pheromones(i, j) = 1;
     end
 end
-
 
 % Find path for each
 % Until we get what we want: iteration/termination criteria
@@ -65,13 +70,18 @@ for iter = 1:iterations,
     if bestAntFitness < bestFitness,
         bestSolution = bestAntSol;
         bestFitness = bestAntFitness;
+        
+        if ~feas && bestFitness < Khard,
+            feas = true;
+            t = toc;
+            fprintf('Feasible solution:\t%.4f seconds\n', t);
+        end
     end
     
     fitnesses(iter) = bestFitness; %#ok
     solutions(iter) = bestSolution; %#ok
     
     % print the global best fitness after this iteration and update the UI
-    fprintf ('iter: %d -- best fitness: %d\n', iter, bestFitness);
     set(handle.Cur_Iter_val,'String', int2str(iter));
     set(handle.Cur_Best_val,'String', int2str(bestFitness));
     drawnow;
@@ -81,7 +91,12 @@ for iter = 1:iterations,
     end
 end
 
+t = toc;
+fprintf('Done execution:\t%.4f seconds\n', t);
+fprintf('Best Fitness:\t%d\n', bestFitness);
+
 end
+
 
 function [ pheromones ] = updatePheromones( pheromones, bestAntPath, bestFitness, rho, Q )
 

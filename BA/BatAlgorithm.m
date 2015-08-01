@@ -17,6 +17,12 @@ function [ bestFitness bestSolution fitnesses solutions ] = BatAlgorithm( ...
 %
 % Returns the best fitness and solutions for the inputs
 
+fprintf('-------------\n');
+fprintf('Bat Algorithm\n');
+tic;
+feas = false;
+Khard = GetKHard(length(courses), numDays, length(students));
+
 np      = popSize;          % Population size
 maxIter = maxIterations;    % Number of generations
 A       = loudness;         % Loudness (constant or decreasing)
@@ -24,8 +30,6 @@ r       = pulseRate;        % Pulse rate (constant or decreasing)
 
 Qmin = 0;         % Frequency minimum
 Qmax = 1;         % Frequency maximum
-
-v = zeros(np, 1); % Velocities
 
 % Initialize the population/solutions
 sols = Schedule.empty(np, 0);
@@ -46,13 +50,16 @@ for iteration = 1:maxIter,
     for i = 1:np,
         
         Q = Qmin + (Qmax - Qmin) * rand;
-        v(i) = (fits(i) - bestFitness) * Q;
+        v = (fits(i) - bestFitness) * Q;
+        
+        alterations = max(1, ceil(log10(abs(v))));
+        alterations = ceil(rand * alterations);
         
         % Pulse rate
         if rand < r,
-            S = Alter(bestSolution, 1, rooms);
+            S = Alter(bestSolution, alterations, rooms);
         else
-            S = Alter(sols(i), max(1, ceil(log10(abs(v(i))))), rooms);
+            S = Alter(sols(i), alterations, rooms);
         end
         
         % Evaluate new solutions
@@ -69,7 +76,11 @@ for iteration = 1:maxIter,
             bestSolution = S;
             bestFitness = fitnessnew;
             
-            fprintf('iter = %4d; fitness = %d\n', iteration, bestFitness);
+            if ~feas && bestFitness < Khard,
+                feas = true;
+                t = toc;
+                fprintf('Feasible solution:\t%.4f seconds\n', t);
+            end
         end
     end
     
@@ -88,6 +99,10 @@ for iteration = 1:maxIter,
         break;
     end
 end
+
+t = toc;
+fprintf('Done execution:\t%.4f seconds\n', t);
+fprintf('Best Fitness:\t%d\n', bestFitness);
 
 end
 

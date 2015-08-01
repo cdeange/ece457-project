@@ -12,15 +12,21 @@ function [ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing( 
 %     handle Object Handles
 % Returns the best fitness and solutions for the inputs
 
+fprintf('-------------------\n');
+fprintf('Simulated Annealing\n');
+tic;
+feas = false;
+Khard = GetKHard(length(schedule.courseMappings), schedule.days, length(students));
+
 % Initializing parameters and settings
-T_min = 1e-5;               % Final stopping temperature
-F_min = 0;                  % Min value of the function
-max_rej = maxRej;           % Maximum number of rejections
-max_run = maxRun;           % Maximum number of runs
-max_accept = maxAccepts;    % Maximum number of accept
-k = 1;                      % Boltzmann constant
-alpha = inAlpha;            % Cooling factor
-guess = schedule;% Initial guess
+T_min = 1e-5;            % Final stopping temperature
+F_min = 0;               % Min value of the function
+max_rej = maxRej;        % Maximum number of rejections
+max_run = maxRun;        % Maximum number of runs
+max_accept = maxAccepts; % Maximum number of accept
+k = 1;                   % Boltzmann constant
+alpha = inAlpha;         % Cooling factor
+guess = schedule;        % Initial guess
 
 % Initializing the counters i,j etc
 i = 0;
@@ -81,6 +87,12 @@ while (T > T_min) && (j <= max_rej) && (E_new > F_min),
     solutions(iter) = guess;
     fitnesses(iter) = E_old;
     
+    if ~feas && E_old < Khard,
+        feas = true;
+        t = toc;
+        fprintf('Feasible solution:\t%.4f seconds\n', t);
+    end
+    
     % update the UI with the global best fitness after this iteration 
     set(handle.Cur_Iter_val,'String', int2str(iter));
     set(handle.Cur_Temp_val,'String', num2str(T));
@@ -94,5 +106,9 @@ end
 bestFitness = min(fitnesses);
 bestSolutions = find(fitnesses == bestFitness);
 bestSolution = solutions(bestSolutions(end));
+
+t = toc;
+fprintf('Done execution:\t%.4f seconds\n', t);
+fprintf('Best Fitness:\t%d\n', bestFitness);
 
 end

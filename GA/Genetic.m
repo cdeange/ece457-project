@@ -14,6 +14,12 @@ function [ bestFitness bestSolution fitnesses solutions ] = Genetic( courses, st
 %
 %Returns the best fitness and solutions for the inputs
 
+fprintf('-------\n');
+fprintf('Genetic\n');
+tic;
+feas = false;
+Khard = GetKHard(length(courses), days, length(students));
+
 % Initializing the parameters
 popsize = populationSize; % Population size
 MaxGen = maxGen; % Max number of generations
@@ -26,7 +32,6 @@ popnew = Schedule.empty(popsize, 0);
 for i = 1:popsize,
     popnew(i) = GenerateInitialSolution(days, timeslots, courses, rooms);
 end
-
 
 % Start the evolution loop
 for i = 1:MaxGen,
@@ -65,6 +70,12 @@ for i = 1:MaxGen,
     set(handle.Cur_Best_val,'String', int2str(fitnesses(i)));
     drawnow;
     
+    if ~feas && best < Khard,
+        feas = true;
+        t = toc;
+        fprintf('Feasible solution:\t%.4f seconds\n', t);
+    end
+    
     if fitnesses(i) == 0,
         break;
     end
@@ -74,6 +85,10 @@ end
 % Record the global best solution ever
 [ bestFitness, bestFitnessIndex ] = max(fitnesses);
 bestSolution = solutions(bestFitnessIndex);
+
+t = toc;
+fprintf('Done execution:\t%.4f seconds\n', t);
+fprintf('Best Fitness:\t%d\n', bestFitness);
 
 end
 
