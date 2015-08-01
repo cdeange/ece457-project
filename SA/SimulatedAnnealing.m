@@ -79,6 +79,7 @@ while (T > T_min) && (j <= max_rej) && (E_new > F_min),
     solutions(iter) = guess; %#ok
     fitnesses(iter) = E_old; %#ok
     
+    % update the UI with the global best fitness after this iteration 
     set(handle.Cur_Iter_val,'String', int2str(iter));
     set(handle.Cur_Temp_val,'String', num2str(T));
     set(handle.Cur_Best_val,'String', int2str(min(fitnesses)));

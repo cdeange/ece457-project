@@ -58,6 +58,8 @@ handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
 
+% If there is currently a schedule loaded, show that it is loaded and
+% enable the start button
 if (isappdata(0,'fileName') == 1 && ...
     isappdata(0,'courses') == 1 && ...
     isappdata(0,'students') == 1 && ...
@@ -70,7 +72,6 @@ if (isappdata(0,'fileName') == 1 && ...
     set(handles.Ant_Start,'Enable', 'on')
     
 end
-
 % UIWAIT makes AntColonyScreen wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
@@ -85,14 +86,35 @@ function varargout = AntColonyScreen_OutputFcn(hObject, eventdata, handles)
 % Get default command line output from handles structure
 varargout{1} = handles.output;
 
+% GLOBAL VARIABLES
+% number of ants
+function r = getNumAnts
+    global numAnts
+    r = numAnts;
+    
+% number of iterations
+function r = getNumIterations
+    global numIterations
+    r = numIterations;
+    
+% rho
+function r = getRho
+    global rho
+    r = rho;
 
-% --- Executes on button press in Load_File.
+% Used to load an input file into the program
 function Load_File_Callback(hObject, eventdata, handles)
 % hObject    handle to Load_File (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+% show a browser with CSV files as the type
 [filename, pathname] = uigetfile({'*.csv','csv files'});
+
+% if the user did not click cancel
 if ~isequal(filename,0)
+    
+    % set the file name and read in the file
     set(handles.FileName_Text,'String', fullfile(pathname, filename))
     [courses students rooms teachers days timeslots] = ReadInput(fullfile(pathname, filename)); 
 
@@ -105,83 +127,76 @@ if ~isequal(filename,0)
     setappdata(0,'timeslots',timeslots);
     setappdata(0,'fileName',fullfile(pathname, filename));
    
+    % allow the user to run the program if there was no error reading in
+    % the file
     set(handles.Ant_Start,'Enable', 'on')
 end
 
-%numAnts
-function r = getNumAnts
-    global numAnts
-    r = numAnts;
-    
-%numIterations
-function r = getNumIterations
-    global numIterations
-    r = numIterations;
-    
-%rho
-function r = getRho
-    global rho
-    r = rho;
 
-
-% --- Executes on button press in Back_Button.
+% Take the user back to the main screen
 function Back_Button_Callback(hObject, eventdata, handles)
 % hObject    handle to Back_Button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-WS_handle = WelcomeScreen; %open main search
+
+% create a handle/open the main screen, and close the current screen
+WS_handle = WelcomeScreen;      % open main screen
 delete(get(hObject, 'parent')); % close this screen
 
 
-% --- Executes on button press in Ant_Start.
+% Executes the ant colony algorithm with the given input parameters
 function Ant_Start_Callback(hObject, eventdata, handles)
 % hObject    handle to Ant_Start (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+% get the input data from appdata
 courses = getappdata(0,'courses');
 students = getappdata(0,'students');
 rooms = getappdata(0,'rooms');
 teachers = getappdata(0,'teachers');
 days = getappdata(0,'days');
 timeslots = getappdata(0,'timeslots');
-    
+
+% disable buttons while the algorithm is running
 set(handles.Ant_Start,'Enable', 'off')
 set(handles.Back_Button,'Enable', 'off')
 
+% run the algorithm
 [bestSolution bestFitness fitnesses solutions] = AntColony(courses, rooms, days, timeslots, getNumAnts(), students, getNumIterations(), getRho, handles);
 
+% change the label to best fitness when the algorithm is complete
 set(handles.Cur_Best_label,'String', 'Best Fitness');
 
+% print the schedule of the best solution
 PrintSchedule(bestSolution);
 
+% plot the best fitness/iteration graph
 figure
 plot(fitnesses');
 
+% reenable the buttons
 set(handles.Ant_Start,'Enable', 'on')
 set(handles.Back_Button,'Enable', 'on')
 
 
 
-
+% updates the global number of ants
 function Num_Ants_val_Callback(hObject, eventdata, handles)
 % hObject    handle to Num_Ants_val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of Num_Ants_val as text
-%        str2double(get(hObject,'String')) returns contents of Num_Ants_val as a double
 global numAnts;
 numAnts = str2double(get(hObject,'String'));
 
 
-% --- Executes during object creation, after setting all properties.
+% initialize the global number of ants
 function Num_Ants_val_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to Num_Ants_val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -189,26 +204,22 @@ global numAnts;
 numAnts = str2double(get(hObject,'String'));
 
 
-
+% updates the global number of iterations
 function Num_Iter_val_Callback(hObject, eventdata, handles)
 % hObject    handle to Num_Iter_val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of Num_Iter_val as text
-%        str2double(get(hObject,'String')) returns contents of Num_Iter_val as a double
 global numIterations;
 numIterations = str2double(get(hObject,'String'));
 
 
-% --- Executes during object creation, after setting all properties.
+% initialize the global number of iterations
 function Num_Iter_val_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to Num_Iter_val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -216,25 +227,21 @@ global numIterations;
 numIterations = str2double(get(hObject,'String'));
 
 
-
+% updates the global rho
 function Rho_val_Callback(hObject, eventdata, handles)
 % hObject    handle to Rho_val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of Rho_val as text
-%        str2double(get(hObject,'String')) returns contents of Rho_val as a double
 global rho;
 rho = str2double(get(hObject,'String'));
 
-% --- Executes during object creation, after setting all properties.
+% initialize the global rho
 function Rho_val_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to Rho_val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end

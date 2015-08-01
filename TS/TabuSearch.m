@@ -36,6 +36,8 @@ for iterations = 1:maxIterations,
         globalBestFitness = bestFitness;
         globalBestSolution = bestSolution;
     end
+    
+    % print the global best fitness after this iteration and update the UI
     fprintf('iterations = %d, global best fitness = %d\n', iterations, globalBestFitness);
     set(handle.Cur_Iter_val,'String', int2str(iterations));
     set(handle.Cur_Best_val,'String', int2str(globalBestFitness));

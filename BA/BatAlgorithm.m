@@ -81,6 +81,7 @@ for iteration = 1:maxIter,
     fitnesses(iteration) = bestFit;
     solutions(iteration) = sols(bestFitIndex);
 
+    % update the UI with the global best fitness after this iteration 
     set(handle.Cur_Iter_val,'String', int2str(iteration));
     set(handle.Cur_Best_val,'String', int2str(bestFitness));
     drawnow;
