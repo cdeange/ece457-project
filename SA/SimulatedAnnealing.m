@@ -17,12 +17,10 @@ T_min = 1;                  % Final stopping temperature
 F_min = 0;                  % Min value of the function
 max_rej = maxRej;           % Maximum number of rejections
 max_run = maxRun;           % Maximum number of runs
-max_accept = maxAccepts;        % Maximum number of accept
+max_accept = maxAccepts;    % Maximum number of accept
 k = 1;                      % Boltzmann constant
 alpha = inAlpha;            % Cooling factor
 guess = schedule;% Initial guess
-
-
 
 % Initializing the counters i,j etc
 i = 0;
@@ -38,8 +36,12 @@ E_new = E_old;
 T_iteration = 1;
 iter = 1;
 
+solutions = Schedule.empty(1, 0);
+fitnesses = zeros(1, 1);
+
 % Starting the simulated annealling
 while (T > T_min) && (j <= max_rej) && (E_new > F_min),
+    
     i = i + 1;
     
     % Check if max numbers of run/accept are met
@@ -76,8 +78,8 @@ while (T > T_min) && (j <= max_rej) && (E_new > F_min),
         j = j + 1;
     end
     
-    solutions(iter) = guess; %#ok
-    fitnesses(iter) = E_old; %#ok
+    solutions(iter) = guess;
+    fitnesses(iter) = E_old;
     
     set(handle.Cur_Iter_val,'String', int2str(iter));
     set(handle.Cur_Temp_val,'String', num2str(T));

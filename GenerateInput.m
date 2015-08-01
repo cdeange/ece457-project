@@ -46,7 +46,7 @@ function [ randClassroom ] = createRandRoom( i, numStudents, Features )
 if isempty(Features),
     randFeatures = [];
 else
-    randNumFeatures = randi([1, length(Features)], 1);
+    randNumFeatures = randi([0, length(Features)], 1);
     randFeatures = randsample(Features, randNumFeatures);
 end
 
@@ -60,7 +60,7 @@ function [ randCourse Teachers ] = createRandCourse( i, numTimeSlots, Features, 
 if isempty(Features),
     randFeatures = [];
 else
-    randNumFeatures = randi([1, length(Features)], 1);
+    randNumFeatures = randi([0, length(Features)], 1);
     randFeatures = randsample(Features, randNumFeatures);
 end
 
@@ -74,7 +74,7 @@ end
 
 function [ randStudent Courses ] = createRandStudent( i, Courses )
 % Create a student taking a random number of courses
-randNumCourses = randi([1, length(Courses) / 2], 1);
+randNumCourses = randi([1, ceil(length(Courses) / 2)], 1);
 randCourses = randsample(Courses, randNumCourses);
 
 for j = 1:length(randCourses)
