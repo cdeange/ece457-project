@@ -75,6 +75,10 @@ for iter = 1:iterations,
     set(handle.Cur_Iter_val,'String', int2str(iter));
     set(handle.Cur_Best_val,'String', int2str(bestFitness));
     drawnow;
+    
+    if fitnesses(iter) == 0,
+        break;
+    end
 end
 
 end
@@ -86,7 +90,7 @@ pheromones = pheromones * (1 - rho);
 
 % Add to the pheromones for the path of the best
 for i = 1:length(bestAntPath)
-    pheromones(i, bestAntPath(i)) = pheromones(i, bestAntPath(i)) + (Q/bestFitness);
+    pheromones(i, bestAntPath(i)) = pheromones(i, bestAntPath(i)) + (Q / bestFitness);
 end
 
 end

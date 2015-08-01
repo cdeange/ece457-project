@@ -1,7 +1,7 @@
 function [ bestFitness bestSolution fitnesses solutions ] = Genetic( courses, students, rooms, days, timeslots, populationSize, maxGen, crossOverProb, mutationProb, handle )
 % Genetic Algorithm to find best schedule
 %
-%       courses List(Course)
+%        courses List(Course)
 %       students List(Student)
 %          rooms List(Classroom)
 %           days Number
@@ -14,9 +14,6 @@ function [ bestFitness bestSolution fitnesses solutions ] = Genetic( courses, st
 %
 %Returns the best fitness and solutions for the inputs
 
-% Anonymous function to get the last index of a returned matrix
-last = @(A) A(end);
-
 % Initializing the parameters
 popsize = populationSize; % Population size
 MaxGen = maxGen; % Max number of generations
@@ -24,14 +21,12 @@ pc = crossOverProb; % Crossover probability
 pm = mutationProb; % Mutation probability
 
 % Generating the initial population/fitness
+fitness = repmat(-Inf, 1, popsize);
 popnew = Schedule.empty(popsize, 0);
 for i = 1:popsize,
     popnew(i) = GenerateInitialSolution(days, timeslots, courses, rooms);
 end
 
-fitness = repmat(-Inf, 1, popsize);
-fitnesses = zeros(1, MaxGen);
-solutions = Schedule.empty(MaxGen, 0);
 
 % Start the evolution loop
 for i = 1:MaxGen,
@@ -61,18 +56,24 @@ for i = 1:MaxGen,
     end
     
     % Record the current best
-    fitnesses(i) = max(fitness);
-    solutions(i) = last(popnew(fitnesses(i) == fitness));
+    [ best, bestIndex ] = max(fitness);
+    fitnesses(i) = best; %#ok
+    solutions(i) = popnew(bestIndex); %#ok
     
-    % update the UI with the global best fitness after this iteration 
+    % update the UI with the global best fitness after this iteration
     set(handle.Cur_Iter_val,'String', int2str(i));
     set(handle.Cur_Best_val,'String', int2str(fitnesses(i)));
     drawnow;
+    
+    if fitnesses(i) == 0,
+        break;
+    end
+    
 end
 
 % Record the global best solution ever
-bestFitness = max(fitnesses);
-bestSolution = last(solutions(fitnesses == bestFitness));
+[ bestFitness, bestFitnessIndex ] = max(fitnesses);
+bestSolution = solutions(bestFitnessIndex);
 
 end
 

@@ -13,7 +13,7 @@ function [ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing( 
 % Returns the best fitness and solutions for the inputs
 
 % Initializing parameters and settings
-T_min = 1;                  % Final stopping temperature
+T_min = 1e-5;               % Final stopping temperature
 F_min = 0;                  % Min value of the function
 max_rej = maxRej;           % Maximum number of rejections
 max_run = maxRun;           % Maximum number of runs

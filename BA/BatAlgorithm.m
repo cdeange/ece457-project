@@ -39,10 +39,6 @@ end
 [bestFitness, I] = min(fits);
 bestSolution = sols(I);
 
-% Containers to measure the best solution per iteration
-solutions = Schedule.empty(maxIter, 0);
-fitnesses = zeros(1, maxIter);
-
 % Start the iterations
 for iteration = 1:maxIter,
     
@@ -78,14 +74,19 @@ for iteration = 1:maxIter,
     end
     
     [bestFit, bestFitIndex] = min(fits);
-    fitnesses(iteration) = bestFit;
-    solutions(iteration) = sols(bestFitIndex);
+    fitnesses(iteration) = bestFit; %#ok
+    solutions(iteration) = sols(bestFitIndex); %#ok
 
     % update the UI with the global best fitness after this iteration 
-    set(handle.Cur_Iter_val,'String', int2str(iteration));
-    set(handle.Cur_Best_val,'String', int2str(bestFitness));
+    set(handle.Cur_Iter_val, 'String', int2str(iteration));
+    set(handle.Cur_Best_val, 'String', int2str(bestFitness));
     drawnow;
     
+    if bestFitness == 0,
+        fitnesses(iteration) = bestFitness; %#ok
+        solutions(iteration) = bestSolution; %#ok
+        break;
+    end
 end
 
 end

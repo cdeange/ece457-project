@@ -16,8 +16,6 @@ globalBestSolution = bestSolution;
 globalBestFitness = bestFitness;
 
 tabuList = zeros(length(schedule.courseMappings));
-fitnesses = zeros(maxIterations, 1);
-solutions = Schedule.empty(maxIterations, 0);
 
 for iterations = 1:maxIterations,
     
@@ -28,8 +26,8 @@ for iterations = 1:maxIterations,
     [ bestSolution bestFitness tabuList ] = ...
         getBestNeighbourForSchedule( bestSolution, globalBestFitness, rooms, tabuList, tabuListLength, students );
     
-    fitnesses(iterations) = bestFitness;
-    solutions(iterations) = bestSolution;
+    fitnesses(iterations) = bestFitness; %#ok
+    solutions(iterations) = bestSolution; %#ok
     
     % Update global best fitness & solution
     if bestFitness < globalBestFitness,
@@ -42,6 +40,10 @@ for iterations = 1:maxIterations,
     set(handle.Cur_Iter_val,'String', int2str(iterations));
     set(handle.Cur_Best_val,'String', int2str(globalBestFitness));
     drawnow;
+    
+    if fitnesses(iterations) == 0,
+        break
+    end
 end
 
 end

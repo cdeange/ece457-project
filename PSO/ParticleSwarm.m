@@ -75,6 +75,9 @@ for i = 1:iterations,
     set(handle.Cur_Best_val,'String', int2str(globalBestFitness));
     drawnow;
     
+    if fitnesses(i) == 0,
+        break;
+    end
 end
 
 bestSolution = globalBestSol;
