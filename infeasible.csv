@@ -1,13 +1,13 @@
-#numDays,numTimeSlots,numCourses,numStudents,numRooms,numTeachers,numEvents
+# numDays,numTimeSlots,numCourses,numStudents,numRooms,numTeachers,numEvents
 10,20,15,30,6,25,5
-#roomID,capacity,features...
+# roomID,capacity,features...
 1,24,1
 2,14,1
 3,28,1
 4,8,1
-5,4,1
+5,4,2
 6,18,1
-#teacherID,classesTaught...
+# teacherID,classesTaught...
 1,9
 2
 3
@@ -33,8 +33,8 @@
 23,5
 24,1
 25,15
-#courseID,duration,featuresReq...
-1,4,1
+# courseID,duration,featuresReq...
+1,4,1,2
 2,5
 3,1,1
 4,5
@@ -49,13 +49,13 @@
 13,2,1
 14,5,
 15,1,1
-#eventID,duration,teacherID,studentID
+# eventID,duration,teacherID,studentID
 1,3,11,14
 2,5,16,6
 3,11,24,17
 4,12,24,21
 5,1,24,19
-#studentID,enrolledCourses...
+# studentID,enrolledCourses...
 1,1,2,4,7,8,12,14,15
 2,1,2,4,5,7,10,13,15
 3,4,9,10,11,14
