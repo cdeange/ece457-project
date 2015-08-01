@@ -1,20 +1,26 @@
 function [ bestFitness bestSolution fitnesses solutions ] = BatAlgorithm( ...
-    numDays, numTimeslots, courses, rooms, students )
+    numDays, numTimeslots, courses, rooms, students, ...
+    popSize, maxIterations, loudness, pulseRate, handle)
 % BatAlgorithm Algorithm to find best schedule
 % (Adapted from X-S Yang, Cambridge University)
 %
-%      numDays Number
-% numTimeslots Number
-%      courses List(Course)
-%        rooms List(Classroom)
-%     students List(Student)
+%       numDays Number
+%  numTimeslots Number
+%       courses List(Course)
+%         rooms List(Classroom)
+%      students List(Student)
+%       popSize Number
+% maxIterations Number
+%      loudness Number
+%     pulseRate Number
+%        handle Object Handles
 %
 % Returns the best fitness and solutions for the inputs
 
-np      = 20;     % Population size
-maxIter = 100;    % Number of generations
-A       = 0.7;    % Loudness (constant or decreasing)
-r       = 0.3;    % Pulse rate (constant or decreasing)
+np      = popSize;          % Population size
+maxIter = maxIterations;    % Number of generations
+A       = loudness;         % Loudness (constant or decreasing)
+r       = pulseRate;        % Pulse rate (constant or decreasing)
 
 Qmin = 0;         % Frequency minimum
 Qmax = 1;         % Frequency maximum
@@ -75,6 +81,10 @@ for iteration = 1:maxIter,
     fitnesses(iteration) = bestFit;
     solutions(iteration) = sols(bestFitIndex);
 
+    set(handle.Cur_Iter_val,'String', int2str(iteration));
+    set(handle.Cur_Best_val,'String', int2str(bestFitness));
+    drawnow;
+    
 end
 
 end

@@ -22,7 +22,7 @@ function varargout = WelcomeScreen(varargin)
 
 % Edit the above text to modify the response to help WelcomeScreen
 
-% Last Modified by GUIDE v2.5 30-Jul-2015 14:59:17
+% Last Modified by GUIDE v2.5 31-Jul-2015 20:17:16
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -141,3 +141,11 @@ function Ant_Colony_Callback(hObject, eventdata, handles)
 ACO_handle = AntColonyScreen; %open tabu search
 delete(get(hObject, 'parent')); % close this screen
 
+
+% --- Executes on button press in Bat_Algorithm.
+function Bat_Algorithm_Callback(hObject, eventdata, handles)
+% hObject    handle to Bat_Algorithm (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+BAT_handle = BatScreen; %open tabu search
+delete(get(hObject, 'parent')); % close this screen
