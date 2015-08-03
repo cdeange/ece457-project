@@ -17,9 +17,7 @@ function [ bestFitness bestSolution fitnesses solutions ] = BatAlgorithm( ...
 %
 % Returns the best fitness and solutions for the inputs
 
-fprintf('-------------\n');
-fprintf('Bat Algorithm\n');
-tic;
+t0 = clock;
 feas = false;
 Khard = GetKHard(length(courses), numDays, length(students));
 
@@ -78,8 +76,7 @@ for iteration = 1:maxIter,
             
             if ~feas && bestFitness < Khard,
                 feas = true;
-                t = toc;
-                fprintf('Feasible solution:\t%.4f seconds\n', t);
+                fprintf('%2d: Feasible solution:\t%.4f seconds\n', handle, etime(clock, t0));
             end
         end
     end
@@ -89,9 +86,9 @@ for iteration = 1:maxIter,
     solutions(iteration) = sols(bestFitIndex); %#ok
 
     % update the UI with the global best fitness after this iteration 
-    set(handle.Cur_Iter_val, 'String', int2str(iteration));
-    set(handle.Cur_Best_val, 'String', int2str(bestFitness));
-    drawnow;
+%     set(handle.Cur_Iter_val, 'String', int2str(iteration));
+%     set(handle.Cur_Best_val, 'String', int2str(bestFitness));
+%     drawnow;
     
     if bestFitness == 0,
         fitnesses(iteration) = bestFitness; %#ok
@@ -100,9 +97,7 @@ for iteration = 1:maxIter,
     end
 end
 
-t = toc;
-fprintf('Done execution:\t%.4f seconds\n', t);
-fprintf('Best Fitness:\t%d\n', bestFitness);
+fprintf('%2d: Done: %.4f seconds,\tFitness: %d\n', handle, etime(clock, t0), bestFitness);
 
 end
 

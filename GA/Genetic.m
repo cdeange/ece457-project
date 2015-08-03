@@ -14,9 +14,7 @@ function [ bestFitness bestSolution fitnesses solutions ] = Genetic( courses, st
 %
 %Returns the best fitness and solutions for the inputs
 
-fprintf('-------\n');
-fprintf('Genetic\n');
-tic;
+t0 = clock;
 feas = false;
 Khard = GetKHard(length(courses), days, length(students));
 
@@ -66,14 +64,13 @@ for i = 1:MaxGen,
     solutions(i) = popnew(bestIndex); %#ok
     
     % update the UI with the global best fitness after this iteration
-    set(handle.Cur_Iter_val,'String', int2str(i));
-    set(handle.Cur_Best_val,'String', int2str(fitnesses(i)));
-    drawnow;
+%     set(handle.Cur_Iter_val,'String', int2str(i));
+%     set(handle.Cur_Best_val,'String', int2str(fitnesses(i)));
+%     drawnow;
     
-    if ~feas && best < Khard,
+    if ~feas && best > -Khard,
         feas = true;
-        t = toc;
-        fprintf('Feasible solution:\t%.4f seconds\n', t);
+        fprintf('%2d: Feasible solution:\t%.4f seconds\n', handle, etime(clock, t0));
     end
     
     if fitnesses(i) == 0,
@@ -86,9 +83,7 @@ end
 [ bestFitness, bestFitnessIndex ] = max(fitnesses);
 bestSolution = solutions(bestFitnessIndex);
 
-t = toc;
-fprintf('Done execution:\t%.4f seconds\n', t);
-fprintf('Best Fitness:\t%d\n', bestFitness);
+fprintf('%2d: Done: %.4f seconds,\tFitness: %d\n', handle, etime(clock, t0), bestFitness);
 
 end
 

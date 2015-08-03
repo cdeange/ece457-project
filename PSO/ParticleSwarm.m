@@ -17,9 +17,7 @@ function [ bestSolution bestFitness fitnesses solutions ] = ParticleSwarm( numPa
 %
 % Returns the best fitness and solutions for the inputs
 
-fprintf('--------------\n');
-fprintf('Particle Swarm\n');
-tic;
+t0 = clock;
 feas = false;
 Khard = GetKHard(length(courses), numDays, length(students));
 
@@ -75,14 +73,13 @@ for i = 1:iterations,
     solutions(i) = bestPartSol; %#ok
     
     % print the global best fitness after this iteration and update the UI
-    set(handle.Cur_Iter_val,'String', int2str(i));
-    set(handle.Cur_Best_val,'String', int2str(globalBestFitness));
-    drawnow;
+%     set(handle.Cur_Iter_val,'String', int2str(i));
+%     set(handle.Cur_Best_val,'String', int2str(globalBestFitness));
+%     drawnow;
     
     if ~feas && bestPartFitness < Khard,
         feas = true;
-        t = toc;
-        fprintf('Feasible solution:\t%.4f seconds\n', t);
+        fprintf('%2d: Feasible solution:\t%.4f seconds\n', handle, etime(clock, t0));
     end
     
     if fitnesses(i) == 0,
@@ -93,9 +90,7 @@ end
 bestSolution = globalBestSol;
 bestFitness = globalBestFitness;
 
-t = toc;
-fprintf('Done execution:\t%.4f seconds\n', t);
-fprintf('Best Fitness:\t%d\n', bestFitness);
+fprintf('%2d: Done: %.4f seconds,\tFitness: %d\n', handle, etime(clock, t0), bestFitness);
 
 end
 

@@ -12,9 +12,7 @@ function [ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing( 
 %     handle Object Handles
 % Returns the best fitness and solutions for the inputs
 
-fprintf('-------------------\n');
-fprintf('Simulated Annealing\n');
-tic;
+t0 = clock;
 feas = false;
 Khard = GetKHard(length(schedule.courseMappings), schedule.days, length(students));
 
@@ -89,15 +87,14 @@ while (T > T_min) && (j <= max_rej) && (E_new > F_min),
     
     if ~feas && E_old < Khard,
         feas = true;
-        t = toc;
-        fprintf('Feasible solution:\t%.4f seconds\n', t);
+        fprintf('%2d: Feasible solution:\t%.4f seconds\n', handle, etime(clock, t0));
     end
     
     % update the UI with the global best fitness after this iteration 
-    set(handle.Cur_Iter_val,'String', int2str(iter));
-    set(handle.Cur_Temp_val,'String', num2str(T));
-    set(handle.Cur_Best_val,'String', int2str(min(fitnesses)));
-    drawnow;
+%     set(handle.Cur_Iter_val,'String', int2str(iter));
+%     set(handle.Cur_Temp_val,'String', num2str(T));
+%     set(handle.Cur_Best_val,'String', int2str(min(fitnesses)));
+%     drawnow;
     
     iter = iter + 1;
 end
@@ -107,8 +104,6 @@ bestFitness = min(fitnesses);
 bestSolutions = find(fitnesses == bestFitness);
 bestSolution = solutions(bestSolutions(end));
 
-t = toc;
-fprintf('Done execution:\t%.4f seconds\n', t);
-fprintf('Best Fitness:\t%d\n', bestFitness);
+fprintf('%2d: Done: %.4f seconds,\tFitness:%d\n', handle, etime(clock, t0), bestFitness);
 
 end

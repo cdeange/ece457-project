@@ -13,9 +13,7 @@ function [ bestSolution bestFitness fitnesses solutions ] = AntColony( courses, 
 %
 % Returns the best fitness and solutions for the inputs
 
-fprintf('----------\n');
-fprintf('Ant Colony\n');
-tic;
+t0 = clock;
 feas = false;
 Khard = GetKHard(length(courses), days, length(students));
 
@@ -73,27 +71,24 @@ for iter = 1:iterations,
         
         if ~feas && bestFitness < Khard,
             feas = true;
-            t = toc;
-            fprintf('Feasible solution:\t%.4f seconds\n', t);
+            fprintf('%2d: Feasible solution:\t%.4f seconds\n', handle, etime(clock, t0));
         end
     end
     
     fitnesses(iter) = bestFitness; %#ok
     solutions(iter) = bestSolution; %#ok
     
-    % print the global best fitness after this iteration and update the UI
-    set(handle.Cur_Iter_val,'String', int2str(iter));
-    set(handle.Cur_Best_val,'String', int2str(bestFitness));
-    drawnow;
+    % Print the global best fitness after this iteration and update the UI
+%     set(handle.Cur_Iter_val,'String', int2str(iter));
+%     set(handle.Cur_Best_val,'String', int2str(bestFitness));
+%     drawnow;
     
     if fitnesses(iter) == 0,
         break;
     end
 end
 
-t = toc;
-fprintf('Done execution:\t%.4f seconds\n', t);
-fprintf('Best Fitness:\t%d\n', bestFitness);
+fprintf('%2d: Done: %.4f seconds,\tFitness: %d\n', handle, etime(clock, t0), bestFitness);
 
 end
 
@@ -132,7 +127,7 @@ acoNode = ACONode(course, paths);
 
 end
 
-function [ solChosen pathsChosen] = getAntSolution( acoNodes, pheromones )
+function [ solChosen pathsChosen ] = getAntSolution( acoNodes, pheromones )
 
 solChosen = CourseMapping.empty(length(acoNodes), 0);
 

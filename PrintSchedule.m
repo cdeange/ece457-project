@@ -1,5 +1,4 @@
 function PrintSchedule( schedule2print )
-return % TODO DO NOT COMMIT
 % PrintSchedule Print a given schedule in a human-readable way
 %
 % schedule2print Schedule
