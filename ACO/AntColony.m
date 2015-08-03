@@ -69,7 +69,7 @@ for iter = 1:iterations,
     fitnesses(iter) = bestFitness; %#ok
     solutions(iter) = bestSolution; %#ok
     
-    % Print the global best fitness after this iteration and update the UI
+    % Update the UI with the global best fitness after this iteration
     set(handle.Cur_Iter_val, 'String', int2str(iter));
     set(handle.Cur_Best_val, 'String', int2str(bestFitness));
     drawnow;

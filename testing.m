@@ -12,7 +12,7 @@ rng(0);
 % numFeatures = 1;
 % [ courses students rooms teachers ] = GenerateInput(timeslots, numCourses, numStudents, numRooms, numTeachers, numEvents, numFeatures);
 
-% [ schedule ] = GenerateInitialSolution(days, timeslots, courses, rooms);
+[ schedule ] = GenerateInitialSolution(days, timeslots, courses, rooms);
 
 
 % PrintSchedule(schedule);
@@ -34,7 +34,3 @@ addpath(strcat(pwd, '/BA'));
 % [ bestFitness bestSolution fitnesses solutions ] = Genetic(courses, students, rooms, days, timeslots);
 % [ bestFitness bestSolution fitnesses solutions ] = BatAlgorithm(days, timeslots, courses, rooms, students)
 
-parfor i = 1:10,
-    [ schedule ] = GenerateInitialSolution(days, timeslots, courses, rooms);
-    TabuSearch(schedule, rooms, 3, students, 20, i);
-end
