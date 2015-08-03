@@ -27,11 +27,11 @@ function varargout = SimulatedAnnealingScreen(varargin)
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
-                   'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @SimulatedAnnealingScreen_OpeningFcn, ...
-                   'gui_OutputFcn',  @SimulatedAnnealingScreen_OutputFcn, ...
-                   'gui_LayoutFcn',  [] , ...
-                   'gui_Callback',   []);
+    'gui_Singleton',  gui_Singleton, ...
+    'gui_OpeningFcn', @SimulatedAnnealingScreen_OpeningFcn, ...
+    'gui_OutputFcn',  @SimulatedAnnealingScreen_OutputFcn, ...
+    'gui_LayoutFcn',  [] , ...
+    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
     gui_State.gui_Callback = str2func(varargin{1});
 end
@@ -61,12 +61,12 @@ guidata(hObject, handles);
 % If there is currently a schedule loaded, show that it is loaded and
 % enable the start button
 if (isappdata(0,'fileName') == 1 && ...
-    isappdata(0,'courses') == 1 && ...
-    isappdata(0,'students') == 1 && ...
-    isappdata(0,'rooms') == 1 && ...
-    isappdata(0,'teachers') == 1 && ...
-    isappdata(0,'days') == 1 && ...
-    isappdata(0,'timeslots') == 1)
+        isappdata(0,'courses') == 1 && ...
+        isappdata(0,'students') == 1 && ...
+        isappdata(0,'rooms') == 1 && ...
+        isappdata(0,'teachers') == 1 && ...
+        isappdata(0,'days') == 1 && ...
+        isappdata(0,'timeslots') == 1)
     
     set(handles.FileName_Text,'String', getappdata(0,'fileName'));
     set(handles.SimulatedAnnealing_Start,'Enable', 'on')
@@ -78,7 +78,7 @@ end
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = SimulatedAnnealingScreen_OutputFcn(hObject, eventdata, handles) 
+function varargout = SimulatedAnnealingScreen_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -90,23 +90,23 @@ varargout{1} = handles.output;
 % GLOBAL VARIABLES
 % max rejectoins
 function r = getMaxRejections
-    global maxRejections
-    r = maxRejections;
-    
+global maxRejections
+r = maxRejections;
+
 % max runs
 function r = getMaxRuns
-    global maxRuns
-    r = maxRuns;
-    
+global maxRuns
+r = maxRuns;
+
 % max accepts
 function r = getMaxAccepts
-    global maxAccepts
-    r = maxAccepts;
-    
+global maxAccepts
+r = maxAccepts;
+
 % alpha
 function r = getAlpha
-    global alpha
-    r = alpha;
+global alpha
+r = alpha;
 
 % Used to load an input file into the program
 function Load_File_Callback(hObject, eventdata, handles)
@@ -122,8 +122,8 @@ if ~isequal(filename,0)
     
     % set the file name and read in the file
     set(handles.FileName_Text,'String', fullfile(pathname, filename))
-    [courses students rooms teachers days timeslots] = ReadInput(fullfile(pathname, filename)); 
-
+    [courses students rooms teachers days timeslots] = ReadInput(fullfile(pathname, filename));
+    
     %set appdata variables to be passed to other guis
     setappdata(0,'courses',courses);
     setappdata(0,'students',students);
@@ -132,7 +132,7 @@ if ~isequal(filename,0)
     setappdata(0,'days',days);
     setappdata(0,'timeslots',timeslots);
     setappdata(0,'fileName',fullfile(pathname, filename));
-   
+    
     % allow the user to run the program if there was no error reading in
     % the file
     set(handles.SimulatedAnnealing_Start,'Enable', 'on')
@@ -163,7 +163,10 @@ rooms = getappdata(0,'rooms');
 teachers = getappdata(0,'teachers');
 days = getappdata(0,'days');
 timeslots = getappdata(0,'timeslots');
-    
+
+[ values, valid ] = ValidateNumbers(getMaxRejections(), getMaxRuns(), getMaxAccepts(), getAlpha());
+if ~valid, return; end
+
 % disable buttons while the algorithm is running
 set(handles.SimulatedAnnealing_Start,'Enable', 'off')
 set(handles.Back_Button,'Enable', 'off')
@@ -171,7 +174,8 @@ set(handles.Cur_Best_label,'String', 'Current Best Fitness:');
 
 % generate initial solution and run the algorithm
 [ schedule ] = GenerateInitialSolution(days, timeslots, courses, rooms);
-[ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing(schedule, rooms, students, getMaxRejections(), getMaxRuns(), getMaxAccepts(), getAlpha(), handles);
+[ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing(...
+    schedule, rooms, students, values(1), values(2), values(3), values(4), handles);
 
 % change the label to best fitness when the algorithm is complete
 set(handles.Cur_Best_label,'String', 'Best Fitness:');
@@ -194,7 +198,7 @@ function Max_Rejections_val_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 global maxRejections;
-maxRejections = str2double(get(hObject,'String'));
+maxRejections = get(hObject,'String');
 
 
 % initialize the global max number of rejections
@@ -207,7 +211,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 global maxRejections;
-maxRejections = str2double(get(hObject,'String'));
+maxRejections = get(hObject,'String');
 
 
 % updates the global number of max runs
@@ -217,7 +221,7 @@ function Max_Runs_val_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 global maxRuns;
-maxRuns = str2double(get(hObject,'String'));
+maxRuns = get(hObject,'String');
 
 
 % initialize the global number of max runs
@@ -230,7 +234,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 global maxRuns;
-maxRuns = str2double(get(hObject,'String'));
+maxRuns = get(hObject,'String');
 
 
 % updates the global number of max accepts
@@ -240,7 +244,7 @@ function Max_Accepts_val_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 global maxAccepts;
-maxAccepts = str2double(get(hObject,'String'));
+maxAccepts = get(hObject,'String');
 
 
 % initialize the global number of max accepts
@@ -253,7 +257,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 global maxAccepts;
-maxAccepts = str2double(get(hObject,'String'));
+maxAccepts = get(hObject,'String');
 
 % updates the global alpha
 function Alpha_val_Callback(hObject, eventdata, handles)
@@ -262,7 +266,7 @@ function Alpha_val_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 global alpha;
-alpha = str2double(get(hObject,'String'));
+alpha = get(hObject,'String');
 
 
 % initialize the global alpha
@@ -275,4 +279,4 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 global alpha;
-alpha = str2double(get(hObject,'String'));
+alpha = get(hObject,'String');

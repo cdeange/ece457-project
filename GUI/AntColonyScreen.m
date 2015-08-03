@@ -27,11 +27,11 @@ function varargout = AntColonyScreen(varargin)
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
-                   'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @AntColonyScreen_OpeningFcn, ...
-                   'gui_OutputFcn',  @AntColonyScreen_OutputFcn, ...
-                   'gui_LayoutFcn',  [] , ...
-                   'gui_Callback',   []);
+    'gui_Singleton',  gui_Singleton, ...
+    'gui_OpeningFcn', @AntColonyScreen_OpeningFcn, ...
+    'gui_OutputFcn',  @AntColonyScreen_OutputFcn, ...
+    'gui_LayoutFcn',  [] , ...
+    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
     gui_State.gui_Callback = str2func(varargin{1});
 end
@@ -61,12 +61,12 @@ guidata(hObject, handles);
 % If there is currently a schedule loaded, show that it is loaded and
 % enable the start button
 if (isappdata(0,'fileName') == 1 && ...
-    isappdata(0,'courses') == 1 && ...
-    isappdata(0,'students') == 1 && ...
-    isappdata(0,'rooms') == 1 && ...
-    isappdata(0,'teachers') == 1 && ...
-    isappdata(0,'days') == 1 && ...
-    isappdata(0,'timeslots') == 1)
+        isappdata(0,'courses') == 1 && ...
+        isappdata(0,'students') == 1 && ...
+        isappdata(0,'rooms') == 1 && ...
+        isappdata(0,'teachers') == 1 && ...
+        isappdata(0,'days') == 1 && ...
+        isappdata(0,'timeslots') == 1)
     
     set(handles.FileName_Text,'String', getappdata(0,'fileName'));
     set(handles.Ant_Start,'Enable', 'on')
@@ -77,7 +77,7 @@ end
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = AntColonyScreen_OutputFcn(hObject, eventdata, handles) 
+function varargout = AntColonyScreen_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -89,18 +89,18 @@ varargout{1} = handles.output;
 % GLOBAL VARIABLES
 % number of ants
 function r = getNumAnts
-    global numAnts
-    r = numAnts;
-    
+global numAnts
+r = numAnts;
+
 % number of iterations
 function r = getNumIterations
-    global numIterations
-    r = numIterations;
-    
+global numIterations
+r = numIterations;
+
 % rho
 function r = getRho
-    global rho
-    r = rho;
+global rho
+r = rho;
 
 % Used to load an input file into the program
 function Load_File_Callback(hObject, eventdata, handles)
@@ -116,8 +116,8 @@ if ~isequal(filename,0)
     
     % set the file name and read in the file
     set(handles.FileName_Text,'String', fullfile(pathname, filename))
-    [courses students rooms teachers days timeslots] = ReadInput(fullfile(pathname, filename)); 
-
+    [courses students rooms teachers days timeslots] = ReadInput(fullfile(pathname, filename));
+    
     %set appdata variables to be passed to other guis
     setappdata(0,'courses',courses);
     setappdata(0,'students',students);
@@ -126,7 +126,7 @@ if ~isequal(filename,0)
     setappdata(0,'days',days);
     setappdata(0,'timeslots',timeslots);
     setappdata(0,'fileName',fullfile(pathname, filename));
-   
+    
     % allow the user to run the program if there was no error reading in
     % the file
     set(handles.Ant_Start,'Enable', 'on')
@@ -158,13 +158,16 @@ teachers = getappdata(0,'teachers');
 days = getappdata(0,'days');
 timeslots = getappdata(0,'timeslots');
 
+[ values, valid ] = ValidateNumbers(getNumAnts(), getNumIterations(), getRho());
+if ~valid, return; end
+
 % disable buttons while the algorithm is running
 set(handles.Ant_Start,'Enable', 'off')
 set(handles.Back_Button,'Enable', 'off')
 set(handles.Cur_Best_label,'String', 'Current Best Fitness:');
 
 % run the algorithm
-[bestSolution bestFitness fitnesses solutions] = AntColony(courses, rooms, days, timeslots, getNumAnts(), students, getNumIterations(), getRho, handles);
+[bestSolution bestFitness fitnesses solutions] = AntColony(courses, rooms, days, timeslots, students, values(1), values(2), values(3), handles);
 
 % change the label to best fitness when the algorithm is complete
 set(handles.Cur_Best_label,'String', 'Best Fitness:');
@@ -189,7 +192,7 @@ function Num_Ants_val_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 global numAnts;
-numAnts = str2double(get(hObject,'String'));
+numAnts = get(hObject,'String');
 
 
 % initialize the global number of ants
@@ -202,7 +205,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 global numAnts;
-numAnts = str2double(get(hObject,'String'));
+numAnts = get(hObject,'String');
 
 
 % updates the global number of iterations
@@ -212,7 +215,7 @@ function Num_Iter_val_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 global numIterations;
-numIterations = str2double(get(hObject,'String'));
+numIterations = get(hObject,'String');
 
 
 % initialize the global number of iterations
@@ -225,7 +228,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 global numIterations;
-numIterations = str2double(get(hObject,'String'));
+numIterations = get(hObject,'String');
 
 
 % updates the global rho
@@ -235,7 +238,7 @@ function Rho_val_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 global rho;
-rho = str2double(get(hObject,'String'));
+rho = get(hObject,'String');
 
 % initialize the global rho
 function Rho_val_CreateFcn(hObject, eventdata, handles)
@@ -247,4 +250,4 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 global rho;
-rho = str2double(get(hObject,'String'));
+rho = get(hObject,'String');

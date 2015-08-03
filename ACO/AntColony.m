@@ -1,5 +1,5 @@
 function [ bestSolution bestFitness fitnesses solutions ] = AntColony( ...
-    courses, rooms, days, timeslots, numAnts, students, iterations, rho, handle )
+    courses, rooms, days, timeslots, students, numAnts, iterations, rho, handle )
 % AntColony Algorithm to find best schedule
 %
 %    courses List(Course)

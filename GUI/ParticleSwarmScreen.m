@@ -174,13 +174,16 @@ teachers = getappdata(0,'teachers');
 days = getappdata(0,'days');
 timeslots = getappdata(0,'timeslots');
 
+[ values, valid ] = ValidateNumbers(getNumParticles(), getNumIterations(), getNoChangeProb(), getRandomProb(), getPbestProb(), getGbestProb());
+if ~valid, return; end
+
 % disable buttons while the algorithm is running
 set(handles.Particle_Start,'Enable', 'off')
 set(handles.Back_Button,'Enable', 'off')
 set(handles.Cur_Best_label,'String', 'Current Best Fitness:');
 
 % run the algorithm
-[ bestSolution bestFitness fitnesses solutions ] = ParticleSwarm(getNumParticles(), days, timeslots, courses, rooms, students, getNumIterations(), getNoChangeProb(), getRandomProb(), getPbestProb(), getGbestProb(), handles);
+[ bestSolution bestFitness fitnesses solutions ] = ParticleSwarm(values(1), days, timeslots, courses, rooms, students, values(2), values(3), values(4), values(5), values(6), handles);
 
 % change the label to best fitness when the algorithm is complete
 set(handles.Cur_Best_label,'String', 'Best Fitness:');
@@ -203,7 +206,7 @@ function Num_Parts_val_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 global numParticles;
-numParticles = str2double(get(hObject,'String'));
+numParticles = get(hObject,'String');
 
 
 % initialize the global number of particles
@@ -216,7 +219,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 global numParticles;
-numParticles = str2double(get(hObject,'String'));
+numParticles = get(hObject,'String');
 
 % updates the global number of iterations
 function Num_Iter_val_Callback(hObject, eventdata, handles)
@@ -225,7 +228,7 @@ function Num_Iter_val_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 global numIterations;
-numIterations = str2double(get(hObject,'String'));
+numIterations = get(hObject,'String');
 
 % initialize the global number of iterations
 function Num_Iter_val_CreateFcn(hObject, eventdata, handles)
@@ -237,7 +240,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 global numIterations;
-numIterations = str2double(get(hObject,'String'));
+numIterations = get(hObject,'String');
 
 % updates the global probability for no change
 function NoChange_Prob_val_Callback(hObject, eventdata, handles)
@@ -246,7 +249,7 @@ function NoChange_Prob_val_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 global noChangeProb;
-noChangeProb = str2double(get(hObject,'String'));
+noChangeProb = get(hObject,'String');
 
 % initialize the global probability for no change
 function NoChange_Prob_val_CreateFcn(hObject, eventdata, handles)
@@ -258,7 +261,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 global noChangeProb;
-noChangeProb = str2double(get(hObject,'String'));
+noChangeProb = get(hObject,'String');
 
 % updates the global probability for taking pbest
 function Pbest_Prob_val_Callback(hObject, eventdata, handles)
@@ -267,7 +270,7 @@ function Pbest_Prob_val_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 global pbestProb;
-pbestProb = str2double(get(hObject,'String'));
+pbestProb = get(hObject,'String');
 
 
 % initialize the global probability for taking pbest
@@ -280,7 +283,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 global pbestProb;
-pbestProb = str2double(get(hObject,'String'));
+pbestProb = get(hObject,'String');
 
 % updates the global probability for choosing random
 function Random_Prob_val_Callback(hObject, eventdata, handles)
@@ -289,7 +292,7 @@ function Random_Prob_val_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 global randomProb;
-randomProb = str2double(get(hObject,'String'));
+randomProb = get(hObject,'String');
 
 
 % initialize the global probability for choosing random
@@ -302,7 +305,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 global randomProb;
-randomProb = str2double(get(hObject,'String'));
+randomProb = get(hObject,'String');
 
 
 % updates the global probability for taking gbest
@@ -312,7 +315,7 @@ function Gbest_Prob_val_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 global gbestProb;
-gbestProb = str2double(get(hObject,'String'));
+gbestProb = get(hObject,'String');
 
 
 % initialize the global probability for taking gbest
@@ -325,4 +328,4 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 global gbestProb;
-gbestProb = str2double(get(hObject,'String'));
+gbestProb = get(hObject,'String');
