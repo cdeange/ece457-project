@@ -20,21 +20,28 @@ end
 
 % Horizontal, add days
 for i = 1:numDays,
-    schedule{1, i + 1} = {strcat('Day ',int2str(i))};
+    schedule{1, i + 1} = {strcat('Day ', int2str(i))};
 end
 
+numCoursesNotEvents = 0;
+for mapping = coursemappings,
+    if mapping.course.courseType == 'C',
+        numCoursesNotEvents = numCoursesNotEvents + 1;
+    end
+end
 
 % Go through and add all events/courses
-for i = 1:length(coursemappings),
-    day = coursemappings(i).day + 1;
-    timeslot = coursemappings(i).timeSlot + 1;
+for mapping = coursemappings,
     
-    formattedMapping = formatCourseMapping(coursemappings(i));
-    duration = coursemappings(i).course.duration;
+    day = mapping.day + 1;
+    timeslot = mapping.timeSlot + 1;
+    
+    formattedMapping = formatCourseMapping(mapping, numCoursesNotEvents);
+    duration = mapping.course.duration;
     
     for ts = timeslot:(timeslot + duration - 1),
         if ts > length(schedule),
-            fprintf('Course %d overflows timeslots!\n', coursemappings(i).course.courseID);
+            fprintf('Course %d overflows timeslots!\n', mapping.course.courseID);
         else
             sizes = size(schedule{ts, day});
             schedule{ts, day}{sizes(1) + 1, 1} =  formattedMapping;
@@ -90,12 +97,18 @@ fprintf('\n');
 
 end
 
-function [ formatted ] = formatCourseMapping( coursemapping )
+
+function [ formatted ] = formatCourseMapping( coursemapping, numCoursesNotEvents )
 % Format for a single cell for a CourseMapping
 timeslot = coursemapping.timeSlot;
 room = coursemapping.room;
 course = coursemapping.course;
 
-str = sprintf('"%s%d" R%d T%d D%d', course.courseType, course.courseID, room.roomID, timeslot, course.duration );
+ID = course.courseID;
+if course.courseType ~= 'C',
+    ID = ID - numCoursesNotEvents;
+end
+
+str = sprintf('"%s%d" R%d T%d D%d', course.courseType, ID, room.roomID, timeslot, course.duration );
 formatted = str;
 end

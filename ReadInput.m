@@ -108,7 +108,7 @@ duration = eventLine(2);
 teacherID = eventLine(3);
 studentID = eventLine(4);
 
-event = Course(offsetID + i, [], duration, 'M', teacherID, studentID);
+event = Course(offsetID + i, [], duration, 'E', teacherID, studentID);
 
 students(studentID).enrolledCourses = [ students(studentID).enrolledCourses, event ];
 teachers(teacherID).classesTaught = [ teachers(teacherID).classesTaught, event ];

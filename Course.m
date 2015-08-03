@@ -4,7 +4,7 @@ classdef Course
     %       courseID Number
     %    featuresReq List(Number)
     %       duration Number
-    %     courseType 'M' or 'C'
+    %     courseType 'E' or 'C'
     %        teacher Number
     % studentsTaking List(Number)
     
