@@ -1,5 +1,5 @@
-function [ bestSolution bestFitness fitnesses solutions ] = AntColony( courses, rooms, days, timeslots, ...
-    numAnts, students, iterations, rho, handle )
+function [ bestSolution bestFitness fitnesses solutions ] = AntColony( ...
+    courses, rooms, days, timeslots, numAnts, students, iterations, rho, handle )
 % AntColony Algorithm to find best schedule
 %
 %    courses List(Course)
@@ -12,10 +12,6 @@ function [ bestSolution bestFitness fitnesses solutions ] = AntColony( courses, 
 %        rho Number
 %
 % Returns the best fitness and solutions for the inputs
-
-t0 = clock;
-feas = false;
-Khard = GetKHard(length(courses), days, length(students));
 
 bestSolution = 0;
 bestFitness = Inf;
@@ -68,27 +64,20 @@ for iter = 1:iterations,
     if bestAntFitness < bestFitness,
         bestSolution = bestAntSol;
         bestFitness = bestAntFitness;
-        
-        if ~feas && bestFitness < Khard,
-            feas = true;
-            fprintf('%2d: Feasible solution:\t%.4f seconds\n', handle, etime(clock, t0));
-        end
     end
     
     fitnesses(iter) = bestFitness; %#ok
     solutions(iter) = bestSolution; %#ok
     
     % Print the global best fitness after this iteration and update the UI
-%     set(handle.Cur_Iter_val,'String', int2str(iter));
-%     set(handle.Cur_Best_val,'String', int2str(bestFitness));
-%     drawnow;
+    set(handle.Cur_Iter_val, 'String', int2str(iter));
+    set(handle.Cur_Best_val, 'String', int2str(bestFitness));
+    drawnow;
     
     if fitnesses(iter) == 0,
         break;
     end
 end
-
-fprintf('%2d: Done: %.4f seconds,\tFitness: %d\n', handle, etime(clock, t0), bestFitness);
 
 end
 
@@ -126,6 +115,7 @@ end
 acoNode = ACONode(course, paths);
 
 end
+
 
 function [ solChosen pathsChosen ] = getAntSolution( acoNodes, pheromones )
 

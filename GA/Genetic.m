@@ -1,4 +1,6 @@
-function [ bestFitness bestSolution fitnesses solutions ] = Genetic( courses, students, rooms, days, timeslots, populationSize, maxGen, crossOverProb, mutationProb, handle )
+function [ bestFitness bestSolution fitnesses solutions ] = Genetic( ...
+    courses, students, rooms, days, timeslots, ...
+    populationSize, maxGen, crossOverProb, mutationProb, handle )
 % Genetic Algorithm to find best schedule
 %
 %        courses List(Course)
@@ -12,11 +14,7 @@ function [ bestFitness bestSolution fitnesses solutions ] = Genetic( courses, st
 %   mutationProb Number
 %         handle Object Handles
 %
-%Returns the best fitness and solutions for the inputs
-
-t0 = clock;
-feas = false;
-Khard = GetKHard(length(courses), days, length(students));
+% Returns the best fitness and solutions for the inputs
 
 % Initializing the parameters
 popsize = populationSize; % Population size
@@ -63,15 +61,10 @@ for i = 1:MaxGen,
     fitnesses(i) = best; %#ok
     solutions(i) = popnew(bestIndex); %#ok
     
-    % update the UI with the global best fitness after this iteration
-%     set(handle.Cur_Iter_val,'String', int2str(i));
-%     set(handle.Cur_Best_val,'String', int2str(fitnesses(i)));
-%     drawnow;
-    
-    if ~feas && best > -Khard,
-        feas = true;
-        fprintf('%2d: Feasible solution:\t%.4f seconds\n', handle, etime(clock, t0));
-    end
+    % Update the UI with the global best fitness after this iteration
+    set(handle.Cur_Iter_val,'String', int2str(i));
+    set(handle.Cur_Best_val,'String', int2str(fitnesses(i)));
+    drawnow;
     
     if fitnesses(i) == 0,
         break;
@@ -83,14 +76,13 @@ end
 [ bestFitness, bestFitnessIndex ] = max(fitnesses);
 bestSolution = solutions(bestFitnessIndex);
 
-fprintf('%2d: Done: %.4f seconds,\tFitness: %d\n', handle, etime(clock, t0), bestFitness);
-
 end
 
 
 % Evolving the new generation
 function [ fitness, popnew ] = evolve( i, pop, popnew, fitness, fitold, students )
 
+% Negate the cost, since genetic must *maximize* fitness
 newFitness = -GetFitness(popnew(i), students);
 if newFitness >= fitold(i),
     % Child replaces parent

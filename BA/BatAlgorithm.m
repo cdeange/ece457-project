@@ -17,17 +17,13 @@ function [ bestFitness bestSolution fitnesses solutions ] = BatAlgorithm( ...
 %
 % Returns the best fitness and solutions for the inputs
 
-t0 = clock;
-feas = false;
-Khard = GetKHard(length(courses), numDays, length(students));
+np      = popSize;       % Population size
+maxIter = maxIterations; % Number of generations
+A       = loudness;      % Loudness (constant or decreasing)
+r       = pulseRate;     % Pulse rate (constant or decreasing)
 
-np      = popSize;          % Population size
-maxIter = maxIterations;    % Number of generations
-A       = loudness;         % Loudness (constant or decreasing)
-r       = pulseRate;        % Pulse rate (constant or decreasing)
-
-Qmin = 0;         % Frequency minimum
-Qmax = 1;         % Frequency maximum
+Qmin = 0;                % Frequency minimum
+Qmax = 1;                % Frequency maximum
 
 % Initialize the population/solutions
 sols = Schedule.empty(np, 0);
@@ -73,11 +69,6 @@ for iteration = 1:maxIter,
         if fitnessnew <= bestFitness,
             bestSolution = S;
             bestFitness = fitnessnew;
-            
-            if ~feas && bestFitness < Khard,
-                feas = true;
-                fprintf('%2d: Feasible solution:\t%.4f seconds\n', handle, etime(clock, t0));
-            end
         end
     end
     
@@ -85,10 +76,10 @@ for iteration = 1:maxIter,
     fitnesses(iteration) = bestFit; %#ok
     solutions(iteration) = sols(bestFitIndex); %#ok
 
-    % update the UI with the global best fitness after this iteration 
-%     set(handle.Cur_Iter_val, 'String', int2str(iteration));
-%     set(handle.Cur_Best_val, 'String', int2str(bestFitness));
-%     drawnow;
+    % Update the UI with the global best fitness after this iteration 
+    set(handle.Cur_Iter_val, 'String', int2str(iteration));
+    set(handle.Cur_Best_val, 'String', int2str(bestFitness));
+    drawnow;
     
     if bestFitness == 0,
         fitnesses(iteration) = bestFitness; %#ok
@@ -96,8 +87,6 @@ for iteration = 1:maxIter,
         break;
     end
 end
-
-fprintf('%2d: Done: %.4f seconds,\tFitness: %d\n', handle, etime(clock, t0), bestFitness);
 
 end
 

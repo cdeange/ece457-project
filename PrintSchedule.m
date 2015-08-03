@@ -86,6 +86,8 @@ for i = 1:numTimeSlots + 1,
     end
 end
 
+fprintf('\n');
+
 end
 
 function [ formatted ] = formatCourseMapping( coursemapping )

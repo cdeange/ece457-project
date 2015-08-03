@@ -10,10 +10,6 @@ function [ globalBestFitness globalBestSolution fitnesses solutions ] = TabuSear
 %
 % Returns the best fitness and solutions for the inputs
 
-t0 = clock;
-feas = false;
-Khard = GetKHard(length(schedule.courseMappings), schedule.days, length(students));
-
 bestSolution = schedule;
 bestFitness = Inf;
 globalBestSolution = bestSolution;
@@ -37,24 +33,17 @@ for iterations = 1:maxIterations,
     if bestFitness < globalBestFitness,
         globalBestFitness = bestFitness;
         globalBestSolution = bestSolution;
-        
-        if ~feas && bestFitness < Khard,
-            feas = true;
-            fprintf('%2d: Feasible solution:\t%.4f seconds\n', handle, etime(clock, t0));
-        end
     end
     
-    % print the global best fitness after this iteration and update the UI
-%     set(handle.Cur_Iter_val,'String', int2str(iterations));
-%     set(handle.Cur_Best_val,'String', int2str(globalBestFitness));
-%     drawnow;
+    % Update the UI with the global best fitness after this iteration
+    set(handle.Cur_Iter_val,'String', int2str(iterations));
+    set(handle.Cur_Best_val,'String', int2str(globalBestFitness));
+    drawnow;
     
     if fitnesses(iterations) == 0,
         break
     end
 end
-
-fprintf('%2d: Done: %.4f seconds,\tFitness:%d\n', handle, etime(clock, t0), globalBestFitness);
 
 end
 

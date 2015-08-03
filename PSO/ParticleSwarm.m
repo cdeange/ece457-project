@@ -1,5 +1,6 @@
-function [ bestSolution bestFitness fitnesses solutions ] = ParticleSwarm( numParticles, numDays, numTimeSlots, ...
-        courses, rooms, students, iterations, noChangeProb, randomProb, pbestProb, gbestProb, handle )
+function [ bestSolution bestFitness fitnesses solutions ] = ParticleSwarm( ...
+    numParticles, numDays, numTimeSlots, courses, rooms, students, iterations, ...
+    noChangeProb, randomProb, pbestProb, gbestProb, handle )
 % ParticleSwarm Algorithm to find best schedule
 %
 % numParticles Number
@@ -16,10 +17,6 @@ function [ bestSolution bestFitness fitnesses solutions ] = ParticleSwarm( numPa
 %       handle Object Handles
 %
 % Returns the best fitness and solutions for the inputs
-
-t0 = clock;
-feas = false;
-Khard = GetKHard(length(courses), numDays, length(students));
 
 particles = Particle.empty(numParticles, 0);
 
@@ -72,15 +69,10 @@ for i = 1:iterations,
     fitnesses(i) = bestPartFitness; %#ok
     solutions(i) = bestPartSol; %#ok
     
-    % print the global best fitness after this iteration and update the UI
-%     set(handle.Cur_Iter_val,'String', int2str(i));
-%     set(handle.Cur_Best_val,'String', int2str(globalBestFitness));
-%     drawnow;
-    
-    if ~feas && bestPartFitness < Khard,
-        feas = true;
-        fprintf('%2d: Feasible solution:\t%.4f seconds\n', handle, etime(clock, t0));
-    end
+    % Update the UI with the global best fitness after this iteration
+    set(handle.Cur_Iter_val, 'String', int2str(i));
+    set(handle.Cur_Best_val, 'String', int2str(globalBestFitness));
+    drawnow;
     
     if fitnesses(i) == 0,
         break;
@@ -89,8 +81,6 @@ end
 
 bestSolution = globalBestSol;
 bestFitness = globalBestFitness;
-
-fprintf('%2d: Done: %.4f seconds,\tFitness: %d\n', handle, etime(clock, t0), bestFitness);
 
 end
 
@@ -151,7 +141,6 @@ for i = 1:length(coursemappings),
 end
 
 sched = Schedule(coursemappings, numDays, numTimeSlots);
-
 newParticle = Particle(sched, particle.personalBestSol, particle.personalBestFitness);
-end
 
+end

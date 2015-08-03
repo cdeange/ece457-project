@@ -1,4 +1,5 @@
-function [ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing( schedule, rooms, students, maxRej, maxRun, maxAccepts, inAlpha, handle )
+function [ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing( ...
+    schedule, rooms, students, maxRej, maxRun, maxAccepts, inAlpha, handle )
 % SimulatedAnnealing Algorithm to find best schedule
 % (Adapted from X-S Yang, Cambridge University)
 %
@@ -11,10 +12,6 @@ function [ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing( 
 %    inAlpha Number
 %     handle Object Handles
 % Returns the best fitness and solutions for the inputs
-
-t0 = clock;
-feas = false;
-Khard = GetKHard(length(schedule.courseMappings), schedule.days, length(students));
 
 % Initializing parameters and settings
 T_min = 1e-5;            % Final stopping temperature
@@ -85,16 +82,11 @@ while (T > T_min) && (j <= max_rej) && (E_new > F_min),
     solutions(iter) = guess;
     fitnesses(iter) = E_old;
     
-    if ~feas && E_old < Khard,
-        feas = true;
-        fprintf('%2d: Feasible solution:\t%.4f seconds\n', handle, etime(clock, t0));
-    end
-    
-    % update the UI with the global best fitness after this iteration 
-%     set(handle.Cur_Iter_val,'String', int2str(iter));
-%     set(handle.Cur_Temp_val,'String', num2str(T));
-%     set(handle.Cur_Best_val,'String', int2str(min(fitnesses)));
-%     drawnow;
+    % Update the UI with the global best fitness after this iteration 
+    set(handle.Cur_Iter_val,'String', int2str(iter));
+    set(handle.Cur_Temp_val,'String', num2str(T));
+    set(handle.Cur_Best_val,'String', int2str(min(fitnesses)));
+    drawnow;
     
     iter = iter + 1;
 end
@@ -103,7 +95,5 @@ end
 bestFitness = min(fitnesses);
 bestSolutions = find(fitnesses == bestFitness);
 bestSolution = solutions(bestSolutions(end));
-
-fprintf('%2d: Done: %.4f seconds,\tFitness:%d\n', handle, etime(clock, t0), bestFitness);
 
 end
