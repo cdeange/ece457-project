@@ -168,12 +168,13 @@ timeslots = getappdata(0,'timeslots');
 % disable buttons while the algorithm is running
 set(handles.BAT_Start,'Enable', 'off')
 set(handles.Back_Button,'Enable', 'off')
+set(handles.Cur_Best_label,'String', 'Current Best Fitness:');
 
 % run the algorithm
 [ bestFitness bestSolution fitnesses solutions ] = BatAlgorithm(days, timeslots, courses, rooms, students, getPopSize(), getNumIterations(), getLoudness(), getPulseRate(), handles);
 
 % change the label to best fitness when the algorithm is complete
-set(handles.Cur_Best_label,'String', 'Best Fitness');
+set(handles.Cur_Best_label,'String', 'Best Fitness:');
 
 % print the schedule of the best solution
 PrintSchedule(bestSolution);

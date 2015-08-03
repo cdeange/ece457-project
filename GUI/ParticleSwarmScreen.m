@@ -177,12 +177,13 @@ timeslots = getappdata(0,'timeslots');
 % disable buttons while the algorithm is running
 set(handles.Particle_Start,'Enable', 'off')
 set(handles.Back_Button,'Enable', 'off')
+set(handles.Cur_Best_label,'String', 'Current Best Fitness:');
 
 % run the algorithm
 [ bestSolution bestFitness fitnesses solutions ] = ParticleSwarm(getNumParticles(), days, timeslots, courses, rooms, students, getNumIterations(), getNoChangeProb(), getRandomProb(), getPbestProb(), getGbestProb(), handles);
 
 % change the label to best fitness when the algorithm is complete
-set(handles.Cur_Best_label,'String', 'Best Fitness');
+set(handles.Cur_Best_label,'String', 'Best Fitness:');
 % print the schedule of the best solution
 PrintSchedule(bestSolution);
 

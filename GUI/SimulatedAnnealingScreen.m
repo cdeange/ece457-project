@@ -167,13 +167,14 @@ timeslots = getappdata(0,'timeslots');
 % disable buttons while the algorithm is running
 set(handles.SimulatedAnnealing_Start,'Enable', 'off')
 set(handles.Back_Button,'Enable', 'off')
+set(handles.Cur_Best_label,'String', 'Current Best Fitness:');
 
 % generate initial solution and run the algorithm
 [ schedule ] = GenerateInitialSolution(days, timeslots, courses, rooms);
 [ bestFitness bestSolution fitnesses solutions ] = SimulatedAnnealing(schedule, rooms, students, getMaxRejections(), getMaxRuns(), getMaxAccepts(), getAlpha(), handles);
 
 % change the label to best fitness when the algorithm is complete
-set(handles.Cur_Best_label,'String', 'Best Fitness');
+set(handles.Cur_Best_label,'String', 'Best Fitness:');
 
 % print the schedule of the best solution
 PrintSchedule(bestSolution);

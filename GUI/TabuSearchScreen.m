@@ -157,13 +157,14 @@ timeslots = getappdata(0,'timeslots');
 % disable buttons while the algorithm is running
 set(handles.Tabu_Start,'Enable', 'off')
 set(handles.Back_Button,'Enable', 'off')
+set(handles.Cur_Best_label,'String', 'Current Best Fitness:');
 
 % generate intial solution and the the algorithm
 [ schedule ] = GenerateInitialSolution(days, timeslots, courses, rooms);
 [ bestFitness bestSolution fitnesses solutions ] = TabuSearch(schedule, rooms, getTabuListLength(), students, getNumIterations(), handles);
 
 % change the label to best fitness when the algorithm is complete
-set(handles.Cur_Best_label,'String', 'Best Fitness');
+set(handles.Cur_Best_label,'String', 'Best Fitness:');
 
 % print the schedule of the best solution
 PrintSchedule(bestSolution);

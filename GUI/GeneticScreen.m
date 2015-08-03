@@ -168,12 +168,13 @@ timeslots = getappdata(0,'timeslots');
 % disable buttons while the algorithm is running
 set(handles.Genetic_Start,'Enable', 'off')
 set(handles.Back_Button,'Enable', 'off')
+set(handles.Cur_Best_label,'String', 'Current Best Fitness:');
 
 % run the algorithm
 [ bestFitness bestSolution fitnesses solutions ] = Genetic( courses, students, rooms, days, timeslots, getPopulationSize(), getMaxGen(), getCrossOverProb(), getMutationProb(), handles );
 
 % change the label to best fitness when the algorithm is complete
-set(handles.Cur_Best_label,'String', 'Best Fitness');
+set(handles.Cur_Best_label,'String', 'Best Fitness:');
 
 % print the schedule of the best solution
 PrintSchedule(bestSolution);
